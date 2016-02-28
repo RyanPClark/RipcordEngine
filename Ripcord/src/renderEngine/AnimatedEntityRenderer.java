@@ -1,0 +1,100 @@
+package renderEngine;
+
+import java.util.List;
+import java.util.Map;
+
+import models.RawModel;
+import models.TexturedModel;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Matrix4f;
+
+import shaders.AnimatedShader;
+import textures.ModelTexture;
+import toolbox.GameMath;
+import entities.AnimatedEntity;
+
+public class AnimatedEntityRenderer {
+	
+	private AnimatedShader shader;
+	
+	public AnimatedEntityRenderer(AnimatedShader shader, Matrix4f projectionMatrix){
+		this.shader = shader;
+		shader.start();
+		shader.loadProjectionMatrix(projectionMatrix);
+		shader.stop();
+	}
+	
+	public void render(Map<TexturedModel, List<AnimatedEntity>> entities, boolean wireframe){
+		
+		for(TexturedModel model:entities.keySet()){
+			prepareTexturedModel(model);
+			List<AnimatedEntity> batch = entities.get(model);
+			for(AnimatedEntity entity:batch){
+				prepareInstance(entity);
+				
+				if(!wireframe){
+					GL11.glDrawElements(GL11.GL_TRIANGLES, Math.round(model.getRawModel().getVertexCount()), GL11.GL_UNSIGNED_INT,0);
+				}else {
+					GL11.glDrawElements(GL11.GL_LINE_LOOP, Math.round(model.getRawModel().getVertexCount()), GL11.GL_UNSIGNED_INT,0);
+				}
+				
+				
+			}
+			unBindTexturedModel();
+		}
+		
+	}
+	
+	public void makeNewProjectionMatrix(Matrix4f projectionMatrix){
+		shader.start();
+		shader.loadProjectionMatrix(projectionMatrix);
+		shader.stop();
+	}
+	
+	private void prepareTexturedModel(TexturedModel model){
+		
+		RawModel rawModel = model.getRawModel();
+		GL30.glBindVertexArray(rawModel.getVaoId());
+		GL20.glEnableVertexAttribArray(0);
+		GL20.glEnableVertexAttribArray(1);
+		GL20.glEnableVertexAttribArray(2);
+		GL20.glEnableVertexAttribArray(3);
+		GL20.glEnableVertexAttribArray(4);
+		ModelTexture texture = model.getTexture();
+		if (texture.isHasTransparency()){
+			MasterRenderer.disableCulling();
+		}
+		shader.loadUseFakeLighting(texture.isUseFakeLighting());
+		shader.loadShineVariables(texture.getShine_damper(), texture.getReflectivity());
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getID());
+		
+	}
+	
+	private void unBindTexturedModel(){
+		
+		MasterRenderer.enableCulling();
+		GL20.glDisableVertexAttribArray(0);
+		GL20.glDisableVertexAttribArray(1);
+		GL20.glDisableVertexAttribArray(2);
+		GL20.glDisableVertexAttribArray(3);
+		GL20.glDisableVertexAttribArray(4);
+		GL30.glBindVertexArray(0);
+		
+	}
+	
+	private void prepareInstance(AnimatedEntity entity){
+		
+		Matrix4f transformationMatrix = GameMath.createTransformationMatrix(entity.getPosition(),
+				entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
+		shader.loadTransformationMatrix(transformationMatrix);
+		shader.loadTween(entity.getTween());
+	}
+	
+	
+	
+}
