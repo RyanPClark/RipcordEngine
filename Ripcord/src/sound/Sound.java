@@ -13,6 +13,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import loaders.SoundLoader;
 import toolbox.MyPaths;
 
+
 public final class Sound {
 	
 	private static Clip[] clip;
@@ -22,10 +23,10 @@ public final class Sound {
 	private static boolean musicOn = true;
 
 	public static void init(){
-		sounds = new AudioInputStream[15];
-		soundStrings = new String[15];
-		clip = new Clip[15];
-		volumes = new float[15];
+		sounds = 		new AudioInputStream[15];
+		soundStrings = 	new String[15];
+		clip = 			new Clip[15];
+		volumes = 		new float[15];
 		
 		soundStrings = SoundLoader.load();
 		volumes = SoundLoader.getVolumes();
@@ -53,10 +54,12 @@ public final class Sound {
 			
 		}
 		
-		clip[1].loop(Clip.LOOP_CONTINUOUSLY);
+		clip[SoundNames.BG_MUSIC.ID].loop(Clip.LOOP_CONTINUOUSLY);
 	}
 	
-	public static void playSound(int i){
+	public static void playSound(SoundNames name){
+		
+		int i = name.ID;
 		
 		if(!clip[i].isOpen()){
 			try {
@@ -100,12 +103,12 @@ public final class Sound {
 	}public static void scream(){
 		
 		if (musicOn){
-			clip[2].start();
+			clip[SoundNames.SCREAM1.ID].start();
 		}
 	}public static void setMusicOn(){
 		
-		if (clip[1].isOpen()){
-			clip[1].start();
+		if (clip[SoundNames.BG_MUSIC.ID].isOpen()){
+			clip[SoundNames.BG_MUSIC.ID].start();
 		}
 		musicOn = true;
 		

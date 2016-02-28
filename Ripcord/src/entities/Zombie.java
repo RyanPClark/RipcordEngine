@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import sound.Sound;
+import sound.SoundNames;
 import terrains.Terrain;
 import toolbox.MousePicker;
 import components.AttackPlayer;
@@ -31,7 +32,7 @@ public class Zombie extends MultiModeledEntity{
 			attackCounter++;
 			if(attackCounter == Statics.biteCounterAmount){
 				attackCounter = 0;
-				Sound.playSound(Statics.biteSoundID);
+				Sound.playSound(SoundNames.BITE);
 			}
 			return true;
 		}

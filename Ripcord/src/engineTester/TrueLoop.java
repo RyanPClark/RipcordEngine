@@ -18,17 +18,19 @@ import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import sound.Sound;
+import sound.SoundNames;
 import textures.CurseClass;
 import toolbox.MousePicker;
 import toolbox.MyInput;
 
 public final class TrueLoop {
 	
-	private Camera camera; private MasterRenderer masterRenderer;
-	private Loader loader; private Gun gun; private Mode mode;
-	private State state; private short weaponID; private Map map; 
-	private boolean wireframe, flying; private float fps;
-	private MousePicker picker;
+	private Camera camera; 				private MasterRenderer masterRenderer;
+	private Loader loader; 				private Gun gun;
+	private State state; 				private short weaponID;
+	private boolean wireframe, flying; 	private float fps;
+	private MousePicker picker;			private Map map;
+	private Mode mode;
 	
 	public void run(){
 		
@@ -88,7 +90,6 @@ public final class TrueLoop {
 			GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
 		
 		DisplayManager.updateDisplay();
-		
 	}
 	
 	private void startLogic(){
@@ -135,8 +136,8 @@ public final class TrueLoop {
 		if(camera.getHealth() <= 0){
 			state = State.CHOOSING;
 			camera.setHealth(64);
-			Sound.playSound(10);
-			Sound.playSound(11);
+			Sound.playSound(SoundNames.SCREAM2);
+			Sound.playSound(SoundNames.BITE);
 			deltaCursor();
 		}
 		displayFPS();

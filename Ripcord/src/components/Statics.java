@@ -23,16 +23,14 @@ public final class Statics {
 	public static final float devLookUpSpeed = 0.5f;
 	public static final float devLookSideSpeed = 1f;
 	public static final float CAM_HEIGHT = 6.4f;
-	public static final int flySpeed = 5;
+	public static final int	flySpeed = 5;
 	public static final int terrainBounds = 125;
 	public static final int rotationCheckFrequency = 4;
 	public static final int lookSpeed = 20;
 	public static final int max_health = 64;
 	
 	public static final int reloadTime = 75;
-	public static final int reloadSoundID = 6;
 	public static final int reloadSoundTime = 15;
-	public static final int gunOutSoundID = 3;
 	public static final int semiautoShots = 4;
 	public static final int maxROFrecoil = 8;
 	public static final int recoilSideHook = 5;
@@ -52,7 +50,6 @@ public final class Statics {
 	public static final float spawnHeight = -4.5f;
 	public static final float risingSpeed = 10;
 	public static final float scaleModifier = 2;
-	public static final int biteSoundID = 11;
 	public static final int biteCounterAmount = 30;
 	public static final int bleedingTime = 8;
 	public static final int deathCounterTime = 45;

@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import org.lwjgl.util.vector.Vector3f;
 
 import security.Cryption;
+import sound.SoundNames;
 import toolbox.MyPaths;
 import enums.Mode;
 import entities.Gun;
@@ -99,7 +100,9 @@ public final class GunLoader {
 				 
 			  }
 			  
-			  gun.setSpecificData(scale, transparency, (short)ROF, automatic, (short)maxAmmo, recoilAmount, power, offsets, mobility, gunSoundID, movingValues, semiauto);
+			  gun.setSpecificData(scale, transparency, (short)ROF, automatic, (short)maxAmmo,
+					  recoilAmount, power, offsets, mobility, SoundNames.values()[gunSoundID],
+					  movingValues, semiauto);
 			  
 			  in.close();
 			  
@@ -169,7 +172,7 @@ public final class GunLoader {
 	          flt = (float) gun.mobility;
 	          output.write("Mobility: " + flt.toString() + "\n");
 	                  
-	          inr = gun.gunSoundID;
+	          inr = gun.gunSoundID.ID;
 	          output.write("GunSoundID: " + inr.toString() + "\n");
 	                  
 	          bool = (Boolean) gun.semiauto;

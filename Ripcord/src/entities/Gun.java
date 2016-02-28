@@ -10,6 +10,7 @@ import components.AttackPlayer;
 import components.Statics;
 import renderEngine.MasterRenderer;
 import sound.Sound;
+import sound.SoundNames;
 
 
 public class Gun extends MultiModeledEntity{
@@ -33,7 +34,7 @@ public class Gun extends MultiModeledEntity{
 	public short ROF, weaponID, maxAmmo;
 	public boolean automatic, semiauto, shooting;
 	public float[] offsets, movingValues;
-	public int gunSoundID;
+	public SoundNames gunSoundID;
 
 	public Gun(TexturedModel model, Vector3f position, float rotX, float rotY,
 			float rotZ, Vector3f scale, short weapon, String tag) {
@@ -54,7 +55,7 @@ public class Gun extends MultiModeledEntity{
 	private void reload(){
 		if(reloading){
 			if(reloadingCounter == Statics.reloadSoundTime){
-				Sound.playSound(Statics.reloadSoundID);
+				Sound.playSound(SoundNames.RELOADING3);
 			}
 			if (reloadingCounter < Statics.reloadTime){
 				ammo += deltaAmmo;
@@ -96,7 +97,7 @@ public class Gun extends MultiModeledEntity{
 		if (ammo <= 0){
 			cocked = false;
 			if(Mouse.isButtonDown(0) && recoilCounter == ROF){
-				Sound.playSound(Statics.gunOutSoundID);
+				Sound.playSound(SoundNames.GUN_OUT);
 			}
 		}
 	}
@@ -203,13 +204,15 @@ public class Gun extends MultiModeledEntity{
 		setRotY(-camera.getYaw()+Statics.rotYShift);
 	}
 	
-	public void setSpecificData(Vector3f scale, boolean transparency, short ROF, boolean automatic, short maxAmmo, float recoilAmount, float power, float[] offsets, float mobility,
-			int gunSoundID, float[] movingValues, boolean semiauto){
+	public void setSpecificData(Vector3f scale, boolean transparency, short ROF,
+			boolean automatic, short maxAmmo, float recoilAmount, float power,
+			float[] offsets, float mobility,
+			SoundNames gunSoundID, float[] movingValues, boolean semiauto){
 	
 		this.setScale(scale); this.getModel().getTexture().setHasTransparency(transparency);
 		this.ROF = ROF; this.automatic = automatic; this.maxAmmo = maxAmmo;
 		this.recoilAmount = recoilAmount; this.power = power; this.offsets = offsets;
-		this.mobility = mobility; this.gunSoundID = (short) gunSoundID;
+		this.mobility = mobility; this.gunSoundID = gunSoundID;
 		this.movingValues = movingValues; this.semiauto = semiauto; this.ammo = maxAmmo;
 	}
 	
