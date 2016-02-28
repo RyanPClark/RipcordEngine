@@ -1,0 +1,9 @@
+Length: 100
+Vector4f: 1.0 0.0 0.0 -30.0
+Vector4f: 1.0 0.0 0.0 30.0
+NewRotation:
+Vector4f: 1.0 0.0 0.0 0.0
+Vector4f: 1.0 0.0 0.0 0.0
+NewRotation:
+Translation: 0.0 1.5 0.0
+Translation: 0.0 0.0 0.0
