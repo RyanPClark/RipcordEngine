@@ -15,7 +15,7 @@ import engineTester.Initialize;
 import entities.Camera;
 import entities.Light;
 import entities.MultiModeledEntity;
-import renderEngine.DisplayManager;
+import nRenderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import toolbox.MyInput;

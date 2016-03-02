@@ -6,6 +6,10 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import entities.Camera;
+import nComponents.CompType;
+import nComponents.Entity;
+import nComponents.Position;
+import nComponents.Rotation;
 
 public final class GameMath {
 	
@@ -47,6 +51,25 @@ public final class GameMath {
 		Matrix4f.rotate(toRadians(camera.getYaw()), rotation2, viewMatrix, viewMatrix);
 		Matrix4f.rotate(toRadians(camera.getRoll()), rotation3, viewMatrix, viewMatrix);
 		Vector3f cameraPos = camera.getPosition();
+		Vector3f negativeCameraPos = new Vector3f(-cameraPos.x,-cameraPos.y,-cameraPos.z);
+		Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
+		
+		return viewMatrix;
+	}
+	public static Matrix4f createViewMatrix(Entity camera){
+		
+		Rotation rComp = (Rotation)camera.getComponentByType(CompType.ROTATION);
+		Vector3f rotation = rComp.getRotation();
+		
+		Position pComp = (Position)camera.getComponentByType(CompType.POSITION);
+		Vector3f position = pComp.getPosition();
+		
+		Matrix4f viewMatrix = new Matrix4f();
+		viewMatrix.setIdentity();
+		Matrix4f.rotate(toRadians(rotation.getX()), rotation1, viewMatrix, viewMatrix);
+		Matrix4f.rotate(toRadians(rotation.getY()), rotation2, viewMatrix, viewMatrix);
+		Matrix4f.rotate(toRadians(rotation.getZ()), rotation3, viewMatrix, viewMatrix);
+		Vector3f cameraPos = position;
 		Vector3f negativeCameraPos = new Vector3f(-cameraPos.x,-cameraPos.y,-cameraPos.z);
 		Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
 		

@@ -7,6 +7,7 @@ import java.util.List;
 import loaders.LightLoader;
 import loaders.MapLoader;
 import loaders.ZombieLoader;
+import nRenderEngine.DisplayManager;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector2f;
@@ -24,7 +25,6 @@ import entities.MultiModeledEntity;
 import entities.ParticleEmitter;
 import entities.Zombie;
 import enums.Mode;
-import renderEngine.DisplayManager;
 import renderEngine.MasterRenderer;
 import terrains.Terrain;
 import toolbox.GameMath;

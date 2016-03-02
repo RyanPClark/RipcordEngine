@@ -2,6 +2,7 @@ package engineTester;
 
 import loaders.GunLoader;
 import maps.Map;
+import nRenderEngine.DisplayManager;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -14,7 +15,6 @@ import entities.Gun;
 import enums.Mode;
 import enums.State;
 import guis.GuiMaster;
-import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import sound.Sound;
