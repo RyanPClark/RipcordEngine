@@ -122,7 +122,8 @@ public final class MousePicker {
 		
 		return d >= 0;
 	}
-public boolean inEllipse(Vector3f center, float c, float g, float k, ParticleEmitter emitter){
+	
+	public boolean inEllipse(Vector3f center, float c, float g, float k, ParticleEmitter emitter){
 		
 		/**
 		 

@@ -27,7 +27,7 @@ public final class GuiMaster {
 	
 	public static void init(Loader loader){
 		
-		guiRenderer = new GUIRenderer(loader);
+		// guiRenderer = new GUIRenderer(loader); TODO fix loader type
 		splash = new GuiTexture(loader.loadTexture(MyPaths.makeTexturePath("guis/splashscreen")), new Vector2f(0f,0f), new Vector2f(1f,1f));
 	}
 	

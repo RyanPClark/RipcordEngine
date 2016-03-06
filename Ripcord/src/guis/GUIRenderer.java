@@ -11,7 +11,6 @@ import org.lwjgl.util.vector.Vector2f;
 import components.Statics;
 
 import models.RawModel;
-import renderEngine.Loader;
 
 public final class GUIRenderer {
 
@@ -20,21 +19,21 @@ public final class GUIRenderer {
 	private final RawModel quad;
 	private GuiShader shader;
 	
-	public GUIRenderer(Loader loader){
+	public GUIRenderer(nRenderEngine.Loader loader){
 		float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
 		quad = loader.loadToVAO(positions, 2);
 		shader = new GuiShader();
 	}
 		
 		
-	protected void Render(List<GuiTexture> guis){
+	public void Render(List<GuiTexture> guis){
 			
 		initialize();
 			
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		
 		for(GuiTexture gui : guis){
-				
+			
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, gui.getTexture());
 			shader.loadTransformation(gui.getMatrix());
 			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
@@ -43,7 +42,7 @@ public final class GUIRenderer {
 		terminate();
 	}
 		
-	protected void Render(GuiTexture gui){
+	public void Render(GuiTexture gui){
 
 		initialize();
 			

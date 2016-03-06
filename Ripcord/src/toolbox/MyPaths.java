@@ -22,23 +22,26 @@ public final class MyPaths {
 		basePath = realPath.toString();
 	}
 		
+	public static String makeFontPath(String input){
+		return basePath + "/Font/"+input+".fnt";
+	}
 	public static String makeTexturePath(String input){
-		return basePath + "\\Images\\"+input+".png";
+		return basePath + "/Images/"+input+".png";
 	}
 	public static String makeOBJPath(String input){
 		
-		return basePath + "\\OBJs\\"+input+".obj";
+		return basePath + "/OBJs/"+input+".obj";
 
 	}public static String makeShaderPath(String input){
 		
-		return basePath + "\\Shaders\\"+input+".txt";
+		return basePath + "/Shaders/"+input+".txt";
 	}
 	public static String makeSoundPath(String input){
 		
-		return basePath + "\\Sounds\\"+input;
+		return basePath + "/Sounds/"+input;
 	}
 	public static String makeSavePath(String input){
 		
-		return basePath + "\\Save Files\\"+input+".data";
+		return basePath + "/Save Files/"+input+".data";
 	}
 }
