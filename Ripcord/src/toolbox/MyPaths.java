@@ -44,4 +44,7 @@ public final class MyPaths {
 		
 		return basePath + "/Save Files/"+input+".data";
 	}
+	public static String getBasePath(){
+		return basePath;
+	}
 }

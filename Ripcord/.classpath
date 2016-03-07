@@ -19,5 +19,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lwjgl/PNGDecoder.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rycla/git/RipcordEngine/Ripcord/lwjgl/jsoup-1.8.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

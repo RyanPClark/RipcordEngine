@@ -5,7 +5,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class KeyControl extends Component {
 
-	private static final float SPEED = 75.0f;
+	private static final float SPEED = 125.0f;
 	
 	@Override
 	public void update(float dt) {

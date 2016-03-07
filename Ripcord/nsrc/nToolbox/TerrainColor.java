@@ -29,17 +29,6 @@ public class TerrainColor {
 		
 		BLEND_MAP_SIZE = image.getHeight();
 		MAP_SIZE = mapSize;
-		
-		int x = 0, y = 1023;
-		
-		int cl = image.getRGB(x,y);
-		int  red = (cl & 0x00ff0000) >> 16;
-		int  green = (cl & 0x0000ff00) >> 8;
-		int  blue = cl & 0x000000ff;
-		// and the Java Color is ...
-		Color c = new Color(red,green,blue);
-		
-		System.out.println("Color1: " + c.getRed() + " " + c.getGreen() + " " + c.getBlue());
 	}
 	
 	public static Vector3f getColor(Vector3f vec){

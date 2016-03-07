@@ -25,6 +25,9 @@ public class GUIText {
 	private FontType font;
 
 	private boolean centerText = false;
+	private boolean render = true;
+	
+	private String linkText;
 
 	/**
 	 * Creates a new text, loads the text's quads into a VAO, and adds the text
@@ -180,6 +183,22 @@ public class GUIText {
 	 */
 	protected String getTextString() {
 		return textString;
+	}
+
+	public boolean isRender() {
+		return render;
+	}
+
+	public void setRender(boolean render) {
+		this.render = render;
+	}
+
+	public String getLinkText() {
+		return linkText;
+	}
+
+	public void setLinkText(String linkText) {
+		this.linkText = linkText;
 	}
 
 }

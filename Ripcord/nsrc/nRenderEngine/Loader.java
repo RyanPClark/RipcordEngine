@@ -20,6 +20,7 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GLContext;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
@@ -74,7 +75,7 @@ public class Loader {
     }
 	
 	public int loadTexture(String fileName){
-		return loadTexture(fileName, -0.4f);
+		return loadTexture(fileName, 0.0f);
 	}
 	
 	public int loadTextureWithBias(String fileName, float bias){
@@ -90,7 +91,14 @@ public class Loader {
 			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0.4f);
 			
 			if (ANISOTROPIC_LEVEL != 1){
-				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, ANISOTROPIC_LEVEL);	
+				if(GLContext.getCapabilities().GL_EXT_texture_filter_anisotropic){
+					float amount = Math.max(ANISOTROPIC_LEVEL, GL11.glGetFloat(EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT));
+					GL11.glTexParameterf(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, amount);	
+				}
+				else {
+					System.out.println("Anisotropic filtering not supported");
+				}
+				
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

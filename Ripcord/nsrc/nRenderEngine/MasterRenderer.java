@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.util.vector.Matrix4f;
 
 import fontMeshCreator.TextMaster;
@@ -18,12 +19,14 @@ import nComponents.Entity;
 import nComponents.ModelComp;
 import nShaders.StaticShader;
 import nShaders.TerrainShader;
+import particles.ParticleMaster;
+import shadows.ShadowMapMasterRenderer;
 import toolbox.MyPaths;
 
 public class MasterRenderer {
 
-	private static final float FOV = 70.0f;
-	private static final float NEAR_PLANE = 0.01f;
+	public  static final float FOV = 70.0f;
+	public  static final float NEAR_PLANE = 0.01f;
 	private static final float FAR_PLANE = 1000.0f;
 	private static final float ZOOM_AMOUNT = 0.0f;
 	
@@ -37,18 +40,22 @@ public class MasterRenderer {
 	private TerrainRenderer terrainRenderer;
 	private GUIRenderer guiRenderer;
 	
+	private ShadowMapMasterRenderer shadowMapRenderer;
+	
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
 	private List<Entity> terrains = new ArrayList<Entity>();
 	private List<GuiTexture> guis = new ArrayList<GuiTexture>();
 	
 	private Matrix4f projectionMatrix;
 	
-	public MasterRenderer(Loader loader){
+	public MasterRenderer(Loader loader, Entity camera){
 		
 		createProjectionMatrix();
 		renderer = new Renderer(shader, projectionMatrix);
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 		guiRenderer = new GUIRenderer(loader);
+		ParticleMaster.init(loader, projectionMatrix);
+		shadowMapRenderer = new ShadowMapMasterRenderer(camera);
 	}
 	
 	public static void enableCulling(){
@@ -70,14 +77,19 @@ public class MasterRenderer {
 		
 		if (Display.wasResized()){
 			GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
-			createProjectionMatrix();
-			shader.start();
-			shader.loadProjectionMatrix(projectionMatrix);
-			shader.stop();
 		}
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		GL11.glClearColor(0, 0, 0, 1);
+		
+		GL13.glActiveTexture(GL13.GL_TEXTURE5);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, getShadowMapTexture());
+	}
+	
+	public void Render(){
+		prepare();
+		guiRenderer.Render(guis);
+		TextMaster.render();
 	}
 	
 	public void Render(Entity light, Entity camera){
@@ -93,10 +105,13 @@ public class MasterRenderer {
 		terrainShader.start();
 		terrainShader.loadViewMatrix(camera);
 		terrainShader.loadLight(light);
-		terrainRenderer.render(terrains);
+		terrainRenderer.render(terrains, shadowMapRenderer.getToShadowMapSpaceMatrix());
 		terrainShader.stop();
 		
 		guiRenderer.Render(guis);
+		
+		ParticleMaster.update();
+		ParticleMaster.render(camera);
 		
 		TextMaster.render();
 		
@@ -126,6 +141,18 @@ public class MasterRenderer {
 		}
 	}
 	
+	public void renderShadowMap(List<Entity> entitiesList, Entity sun){
+		for(Entity ent : entitiesList){
+			processEntity(ent);
+		}
+		shadowMapRenderer.render(entities, sun);
+		entities.clear();
+	}
+	
+	public int getShadowMapTexture(){
+		return shadowMapRenderer.getShadowMap();
+	}
+	
 	private void createProjectionMatrix(){
 		
 		float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
@@ -144,6 +171,8 @@ public class MasterRenderer {
 	
 	public void cleanUp(){
 		
+		shadowMapRenderer.cleanUp();
+		ParticleMaster.cleanUp();
 		terrainShader.cleanUp();
 		shader.cleanUp();
 	}

@@ -24,8 +24,11 @@ public class Position extends Component {
 		this.pos = pos;
 	}
 	
-	public Vector3f getPosition(){
-		
+	public void setPosition(Vector3f position){
+		this.pos = position;
+	}
+	
+	public Vector3f getPosition(){	
 		return pos;
 	}
 }

@@ -21,6 +21,8 @@ public class TerrainShader extends ShaderProgram {
 	private int location_gSampler;
 	private int location_bSampler;
 	private int location_blendMap;
+	private int location_shadowMapSpace;
+	private int location_shadowMap;
 	
 	
 	public TerrainShader(String vertexFile, String fragmentFile) {
@@ -43,6 +45,8 @@ public class TerrainShader extends ShaderProgram {
 		location_gSampler = super.getUniformLocation("gTexture");
 		location_bSampler = super.getUniformLocation("bTexture");
 		location_blendMap = super.getUniformLocation("blendMap");
+		location_shadowMapSpace = super.getUniformLocation("toShadowMapSpace");
+		location_shadowMap = super.getUniformLocation("shadowMap");
 	}
 
 	@Override
@@ -53,12 +57,17 @@ public class TerrainShader extends ShaderProgram {
 		super.bindAttribute(2, "normal");
 	}
 
+	public void loadToShadowMapSpace(Matrix4f matrix){
+		super.loadMatrix(location_shadowMapSpace, matrix);
+	}
+	
 	public void connectTextureUnits(){
 		super.loadInt(location_backgroundSampler, 0);
 		super.loadInt(location_rSampler, 1);
 		super.loadInt(location_gSampler, 2);
 		super.loadInt(location_bSampler, 3);
 		super.loadInt(location_blendMap, 4);
+		super.loadInt(location_shadowMap, 5);
 	}
 	
 	public void loadTransformationMatrix(Matrix4f matrix){

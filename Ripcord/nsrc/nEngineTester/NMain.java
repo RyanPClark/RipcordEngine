@@ -3,8 +3,8 @@ package nEngineTester;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -13,9 +13,11 @@ import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
 import fontMeshCreator.TextMaster;
 import guis.GuiTexture;
+import html.LoadPage;
 import models.RawModel;
 import models.TexturedModel;
 import nComponents.Color;
+import nComponents.CompType;
 import nComponents.Entity;
 import nComponents.KeyControl;
 import nComponents.ModelComp;
@@ -42,13 +44,22 @@ public class NMain {
 			
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
-		ModelData data = OBJLoader.loadOBJ(MyPaths.makeOBJPath("static/bus1"));
+		ModelData data = OBJLoader.loadOBJ(MyPaths.makeOBJPath("static/police_car1"));
 		RawModel model = loader.loadToVAO(data.getVertices(), data.getTextureCoords(),
 			data.getNormals(), data.getIndices());
 		
-		MasterRenderer mRenderer = new MasterRenderer(loader);
+		Entity cam = new Entity();
+		cam.addComponent(new Position(cam, new Vector3f(350,75.0f,350)));
+		cam.addComponent(new Rotation(cam, new Vector3f(45,-45,0)));
+		cam.addComponent(new KeyControl(cam));
 		
-		ModelTexture texture = new ModelTexture(loader.loadTexture(MyPaths.makeTexturePath("static/bus1")));
+		MasterRenderer mRenderer = new MasterRenderer(loader, cam);
+		
+		TextMaster.init(loader);
+		FontType font = new FontType(loader.loadTextureWithBias(MyPaths.makeTexturePath("font/candara"), 0.0f),
+				new File(MyPaths.makeFontPath("candara")));
+		
+		ModelTexture texture = new ModelTexture(loader.loadTexture(MyPaths.makeTexturePath("static/police_car1")));
 		texture.setReflectivity(0.0f);
 		texture.setShine_damper(10.0f);
 		texture.setNumberOfRows(1);
@@ -58,41 +69,50 @@ public class NMain {
 		List<Entity> terrains = new ArrayList<Entity>();
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
 		
-		TextMaster.init(loader);
-		FontType font = new FontType(loader.loadTextureWithBias(MyPaths.makeTexturePath("font/arial"), 0.0f),
-				new File(MyPaths.makeFontPath("arial")));
-		GUIText text = new GUIText("My first text", 1, font, new Vector2f(0,0), 1.0f, true);
-		text.setColour(1, 1, 1);
+		LoadPage.load(font);
+		
+		/* Load test text */
 		
 		
-		Random r = new Random();
+		GUIText textNo = new GUIText("You cannot put this entity here!", 3, font,
+				new Vector2f(0,0), 1.0f, true);
+		GUIText textYes = new GUIText("You can put this entity here!", 3, font,
+				new Vector2f(0,0), 1.0f, true);
+		textNo.setColour(1, 0, 0);
+		textNo.setRender(false);
+		textYes.setColour(0, 1, 0);
+		textYes.setRender(false);
 		
-		/*for(int i = 0; i < 8; i++){
+		/* Finished with test fonts */
+		
+		for(int i = 0; i < 1; i++){
 			Entity ent = new Entity();
-			ent.addComponent(new Position(ent, new Vector3f(r.nextInt(500)-250,0,r.nextInt(500)-250)));
-			ent.addComponent(new Rotation(ent, new  Vector3f(0,-30,0)));
-			ent.addComponent(new Scale(ent, 0.5f));
+			ent.addComponent(new Position(ent, new Vector3f(0,0,0)));
+			ent.addComponent(new Rotation(ent, new  Vector3f(0,0,0)));
+			ent.addComponent(new Scale(ent, 2.0f));
 			ent.addComponent(new ModelComp(ent, tModel));
 			ent.addComponent(new TextureIndex(ent, 0));
 
 			entities.add(ent);
-		}*/
+		}
 		
-		Entity cam = new Entity();
-		cam.addComponent(new Position(cam, new Vector3f(350,75.0f,350)));
-		cam.addComponent(new Rotation(cam, new Vector3f(45,-45,0)));
-		cam.addComponent(new KeyControl(cam));
+		/* load light */
 		
 		Entity light = new Entity();
-		light.addComponent(new Position(light, new Vector3f(1000,2000,0)));
+		light.addComponent(new Position(light, new Vector3f(-10000,20000,-10000)));
 		light.addComponent(new Color(light, new Vector3f(1,1,1), 2.0f));
+		
+		/* done with light */
 		
 		MousePicker picker = new MousePicker(cam, mRenderer.getProjectionMatrix());
 		
-		GuiTexture gui = new GuiTexture(loader.loadTexture(MyPaths.makeTexturePath("Guis/resumeGame")),
-				new Vector2f(-0.8f,0.8f), new Vector2f(0.2f,0.2f));
+		//GuiTexture gui = new GuiTexture(loader.loadTexture(MyPaths.makeTexturePath("Guis/resumeGame")),
+		//		new Vector2f(-0.8f,0.8f), new Vector2f(0.2f,0.2f));
 		
-		guis.add(gui);
+		//guis.add(gui);
+		
+		//GuiTexture shadowMap = new GuiTexture(mRenderer.getShadowMapTexture(), new Vector2f(0.5f,0.5f), new Vector2f(0.5f, 0.5f));
+		//guis.add(shadowMap);
 		
 		/* TERRAIN GENERATION HERE */
 		
@@ -117,20 +137,48 @@ public class NMain {
 		
 		/* END TERRAIN GENERATION */
 		
+		boolean gameloop = false;
+		
 		while(!Display.isCloseRequested()){
 			
-			float dt = DisplayManager.getDelta();
-			
-			for(Entity ent : entities){
-				ent.update(dt/1000.0f);
+			if(!gameloop){
+				render(mRenderer, guis);
+				if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
+					for(GUIText text : LoadPage.texts){
+						TextMaster.removeText(text);
+					}
+					gameloop = true;
+				}
+			}
+			else {
+				
+				float dt = DisplayManager.getDelta();
+				
+				picker.update();
+				
+				for(Entity ent : entities){
+					ent.update(dt/1000.0f);
+					Position pos = (Position)ent.getComponentByType(CompType.POSITION);
+					pos.setPosition(picker.getCurrentTerrainPoint());
+				}
+				
+				
+				cam.update(dt/1000.0f);
+				
+				Vector3f color = TerrainColor.getColor(picker.getCurrentTerrainPoint());
+				
+				if(color.y > 100 || color.x > 100){
+					textYes.setRender(true);
+					textNo.setRender(false);
+				}
+				else {
+					textYes.setRender(false);
+					textNo.setRender(true);
+				}
+				
+				render(cam, mRenderer, entities, terrains, guis, light);
 			}
 			
-			picker.update();
-			cam.update(dt/1000.0f);
-			
-			//Vector3f color = TerrainColor.getColor(picker.getCurrentTerrainPoint());
-			
-			render(cam, mRenderer, entities, terrains, guis, light);
 		}
 		
 		TextMaster.cleanUp();
@@ -139,8 +187,19 @@ public class NMain {
 		DisplayManager.closeDisplay();
 	}
 	
+	private static void render(MasterRenderer mRenderer, List<GuiTexture> guis){
+		
+		for(GuiTexture gui : guis){
+			mRenderer.processGui(gui);
+		}
+		mRenderer.Render();
+		DisplayManager.updateDisplay();
+	}
+	
 	private static void render(Entity camera, MasterRenderer mRenderer, List<Entity> ents, List<Entity> terrains,
 			List<GuiTexture> guis, Entity light){
+		
+		mRenderer.renderShadowMap(ents, light);
 		
 		for(Entity ent : ents){
 			mRenderer.processEntity(ent);
