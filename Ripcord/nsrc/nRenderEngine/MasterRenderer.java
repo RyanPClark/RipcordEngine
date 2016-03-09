@@ -12,6 +12,7 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import fontMeshCreator.TextMaster;
 import guis.GUIRenderer;
+import guis.GuiInteraction;
 import guis.GuiTexture;
 import models.TexturedModel;
 import nComponents.CompType;
@@ -56,6 +57,7 @@ public class MasterRenderer {
 		guiRenderer = new GUIRenderer(loader);
 		ParticleMaster.init(loader, projectionMatrix);
 		shadowMapRenderer = new ShadowMapMasterRenderer(camera);
+		GuiInteraction.init(loader, guiRenderer);
 	}
 	
 	public static void enableCulling(){
@@ -86,10 +88,20 @@ public class MasterRenderer {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, getShadowMapTexture());
 	}
 	
+	public void quickPrepare(){
+		if (Display.wasResized()){
+			GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		}
+		
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		GL11.glClearColor(0, 0, 0, 1);
+	}
+	
 	public void Render(){
-		prepare();
+		quickPrepare();
 		guiRenderer.Render(guis);
 		TextMaster.render();
+		guis.clear();
 	}
 	
 	public void Render(Entity light, Entity camera){
@@ -117,6 +129,7 @@ public class MasterRenderer {
 		
 		terrains.clear();
 		entities.clear();
+		guis.clear();
 	}
 	
 	public void processGui(GuiTexture gui){

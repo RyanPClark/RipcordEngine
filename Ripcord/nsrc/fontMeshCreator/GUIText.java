@@ -26,8 +26,6 @@ public class GUIText {
 
 	private boolean centerText = false;
 	private boolean render = true;
-	
-	private String linkText;
 
 	/**
 	 * Creates a new text, loads the text's quads into a VAO, and adds the text
@@ -118,6 +116,10 @@ public class GUIText {
 		return position;
 	}
 
+	public void changeY(float dy){
+		position.y += dy;
+	}
+	
 	/**
 	 * @return the ID of the text's VAO, which contains all the vertex data for
 	 *         the quads on which the text will be rendered.
@@ -191,14 +193,6 @@ public class GUIText {
 
 	public void setRender(boolean render) {
 		this.render = render;
-	}
-
-	public String getLinkText() {
-		return linkText;
-	}
-
-	public void setLinkText(String linkText) {
-		this.linkText = linkText;
 	}
 
 }

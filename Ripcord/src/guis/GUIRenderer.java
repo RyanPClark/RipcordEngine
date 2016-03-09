@@ -24,8 +24,7 @@ public final class GUIRenderer {
 		quad = loader.loadToVAO(positions, 2);
 		shader = new GuiShader();
 	}
-		
-		
+	
 	public void Render(List<GuiTexture> guis){
 			
 		initialize();
@@ -34,25 +33,42 @@ public final class GUIRenderer {
 		
 		for(GuiTexture gui : guis){
 			
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, gui.getTexture());
-			shader.loadTransformation(gui.getMatrix());
-			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
+			if(GuiInteraction.isInArea(gui) && gui.isFrame()){
+				
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D, gui.getTexture());
+				shader.loadTransformation(gui.getMatrix());
+				GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
+				
+				GuiInteraction.highLightTexture.setPosition(gui.getPosition());
+				GuiInteraction.highLightTexture.setscale(gui.getScale());
+				
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D, GuiInteraction.highLightTexture.getTexture());
+				shader.loadTransformation(GuiInteraction.highLightTexture.getMatrix());
+				GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
+			}
+			else {
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D, gui.getTexture());
+				shader.loadTransformation(gui.getMatrix());
+				GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
+			}
 		}
-			
+		
 		terminate();
 	}
 		
-	public void Render(GuiTexture gui){
-
-		initialize();
-			
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, gui.getTexture());
+	public void Render(GuiTexture gui, boolean do_initialize){
 		
+		if(do_initialize){
+			initialize();
+			GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		}
+		
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, gui.getTexture());
 		shader.loadTransformation(gui.getMatrix());
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
 			
-		terminate();
+		if(do_initialize)
+			terminate();
 	}
 		
 	protected void renderBullets(GuiTexture bullet, int ammo){

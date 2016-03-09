@@ -18,6 +18,7 @@ public class TextMeshCreator {
 	protected TextMeshData createTextMesh(GUIText text) {
 		List<Line> lines = createStructure(text);
 		TextMeshData data = createQuadVertices(text, lines);
+		data.setNum_lines(lines.size());
 		return data;
 	}
 

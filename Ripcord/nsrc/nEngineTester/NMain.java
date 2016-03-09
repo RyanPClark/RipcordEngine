@@ -1,6 +1,7 @@
 package nEngineTester;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import fontMeshCreator.GUIText;
 import fontMeshCreator.TextMaster;
 import guis.GuiTexture;
 import html.LoadPage;
+import html.Page;
 import models.RawModel;
 import models.TexturedModel;
 import nComponents.Color;
@@ -69,7 +71,13 @@ public class NMain {
 		List<Entity> terrains = new ArrayList<Entity>();
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
 		
-		LoadPage.load(font);
+		Page homepage = new Page();
+		
+		try {
+			LoadPage.load(font, homepage, loader, "/html/homepage.html");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		/* Load test text */
 		
@@ -139,14 +147,21 @@ public class NMain {
 		
 		boolean gameloop = false;
 		
+		Page currentPage = homepage;
+		
 		while(!Display.isCloseRequested()){
 			
 			if(!gameloop){
-				render(mRenderer, guis);
+				render(mRenderer, currentPage);
+				
+				currentPage = currentPage.update(loader, font);
+				
+				if(currentPage == null){
+					gameloop = true;
+				}
+				
 				if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-					for(GUIText text : LoadPage.texts){
-						TextMaster.removeText(text);
-					}
+					currentPage.unload();
 					gameloop = true;
 				}
 			}
@@ -187,9 +202,9 @@ public class NMain {
 		DisplayManager.closeDisplay();
 	}
 	
-	private static void render(MasterRenderer mRenderer, List<GuiTexture> guis){
+	private static void render(MasterRenderer mRenderer, Page page){
 		
-		for(GuiTexture gui : guis){
+		for(GuiTexture gui : page.getGuis()){
 			mRenderer.processGui(gui);
 		}
 		mRenderer.Render();

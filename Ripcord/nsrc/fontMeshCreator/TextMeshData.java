@@ -10,6 +10,8 @@ public class TextMeshData {
 	private float[] vertexPositions;
 	private float[] textureCoords;
 	
+	private int num_lines;
+	
 	protected TextMeshData(float[] vertexPositions, float[] textureCoords){
 		this.vertexPositions = vertexPositions;
 		this.textureCoords = textureCoords;
@@ -25,6 +27,14 @@ public class TextMeshData {
 
 	public int getVertexCount() {
 		return vertexPositions.length/2;
+	}
+
+	public int getNum_lines() {
+		return num_lines;
+	}
+
+	public void setNum_lines(int num_lines) {
+		this.num_lines = num_lines;
 	}
 
 }

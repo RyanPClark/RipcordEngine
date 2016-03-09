@@ -32,7 +32,7 @@ public final class GuiMaster {
 	}
 	
 	public static void RenderSplash(){
-		guiRenderer.Render(splash);
+		guiRenderer.Render(splash,true);
 	}
 	
 	public static void loadRest(Loader loader){
@@ -178,7 +178,7 @@ public final class GuiMaster {
 			Integer letter = Integer.parseInt(subString);
 			GuiTexture tex = numbers.get(letter);
 			tex.setPosition(new Vector2f(tex.getPosition().x + i/Statics.distanceBetweenNumbers + offsets.x, tex.getPosition().y+offsets.y));
-			guiRenderer.Render(tex);
+			guiRenderer.Render(tex,true);
 			tex.setPosition(new Vector2f(tex.getPosition().x - i/Statics.distanceBetweenNumbers - offsets.x, tex.getPosition().y-offsets.y));
 			
 		}
