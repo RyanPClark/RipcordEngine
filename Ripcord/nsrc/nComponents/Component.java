@@ -1,5 +1,14 @@
 package nComponents;
 
+/**
+ * 
+ * @author Ryan Clark
+ *
+ * Base class for component based architecture. Each component has a parent, type, 
+ * and update method, as well as associated getters and setters.
+ * 
+ */
+
 public abstract class Component {
 
 	public abstract void update(float dt);
@@ -19,6 +28,4 @@ public abstract class Component {
 	public void setType(CompType type) {
 		this.type = type;
 	}
-	
-	
 }

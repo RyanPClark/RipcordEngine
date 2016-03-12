@@ -1,5 +1,11 @@
 package guis;
 
+/**
+ * @author Ryan Clark
+ * 
+ * Renders GUIs to screen and highlights them each frame.
+ */
+
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
@@ -8,13 +14,11 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Vector2f;
 
-import components.Statics;
-
 import models.RawModel;
 
 public final class GUIRenderer {
 
-	private static final float distanceBetweenBullets = Statics.distanceBetweenBullets;
+	private static final float distanceBetweenBullets = 70.0f;
 	
 	private final RawModel quad;
 	private GuiShader shader;
@@ -25,6 +29,11 @@ public final class GUIRenderer {
 		shader = new GuiShader();
 	}
 	
+	/**
+	 * Called once each frame to render a list of GUIs to the screen.
+	 * 
+	 * @param guis - the GUIs to be rendered this frame.
+	 */
 	public void Render(List<GuiTexture> guis){
 			
 		initialize();
@@ -55,8 +64,45 @@ public final class GUIRenderer {
 		
 		terminate();
 	}
+	
+	/**
+	 * Starts shader and binds VAO. Called once each frame.
+	 */
+	private void initialize(){
 		
-	public void Render(GuiTexture gui, boolean do_initialize){
+		GL30.glBindVertexArray(quad.getVaoId());
+		GL20.glEnableVertexAttribArray(0);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+			
+		shader.start();
+	}
+	/**
+	 * Stops shader and unbinds VAO. Called once each frame.
+	 */
+	private void terminate(){
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL20.glDisableVertexAttribArray(0);
+		GL30.glBindVertexArray(0);
+			
+		shader.stop();
+	}
+	
+	/**
+	 * called by MasterRenderer at program termination
+	 */
+	public void cleanUp(){
+		shader.cleanUp();
+	}
+	
+	/**
+	 * @deprecated
+	 * @param gui
+	 * @param do_initialize
+	 */
+	protected void Render(GuiTexture gui, boolean do_initialize){
 		
 		if(do_initialize){
 			initialize();
@@ -71,6 +117,11 @@ public final class GUIRenderer {
 			terminate();
 	}
 		
+	/**
+	 * @deprecated
+	 * @param bullet
+	 * @param ammo
+	 */
 	protected void renderBullets(GuiTexture bullet, int ammo){
 			
 		initialize();
@@ -89,29 +140,5 @@ public final class GUIRenderer {
 		bullet.setPosition(new Vector2f(bullet.getPosition().x - ammo/distanceBetweenBullets, bullet.getPosition().y));
 		
 		terminate();
-	}
-	
-	private void initialize(){
-		
-		GL30.glBindVertexArray(quad.getVaoId());
-		GL20.glEnableVertexAttribArray(0);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-			
-		shader.start();
-	}
-	
-	private void terminate(){
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL20.glDisableVertexAttribArray(0);
-		GL30.glBindVertexArray(0);
-			
-		shader.stop();
-	}
-		
-	protected void cleanUp(){
-		shader.cleanUp();
 	}
 }

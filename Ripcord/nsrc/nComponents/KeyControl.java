@@ -1,15 +1,24 @@
 package nComponents;
 
+/**
+ * @author Ryan Clark
+ * 
+ * Keyboard input for camera movement.
+ */
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 public class KeyControl extends Component {
 
-	private static final float SPEED = 125.0f;
+	private float speed = 125.0f;
 	
-	@Override
+	/**
+	 * @param dt - delta time
+	 * 
+	 * Updates the Position of the parent entity based on the rotation and keyboard inputs
+	 */
 	public void update(float dt) {
-		// TODO Auto-generated method stub
 		
 		Entity ent = (Entity)getParent();
 		Position pos = (Position)ent.getComponentByType(CompType.POSITION);
@@ -42,28 +51,29 @@ public class KeyControl extends Component {
 			direction.y -= 1;
 		}
 		
-		float nx = pos.getPosition().getX()+direction.x * dt * SPEED;
-		float ny = pos.getPosition().getY()+direction.y * dt * SPEED;
-		float nz = pos.getPosition().getZ()+direction.z * dt * SPEED;
+		float nx = pos.getPosition().getX()+direction.x * dt * speed;
+		float ny = pos.getPosition().getY()+direction.y * dt * speed;
+		float nz = pos.getPosition().getZ()+direction.z * dt * speed;
 		
-		if(nx < -360 || nx > 360){
+		if(nx < -360 || nx > 360)
 			nx = pos.getPosition().getX();
-		}
-		if(nz < -360 || nz > 360){
+		
+		if(nz < -360 || nz > 360)
 			nz = pos.getPosition().getZ();
-		}
-		if(ny < 50 || ny > 175){
+		
+		if(ny < 50 || ny > 175)
 			ny = pos.getPosition().getY();
-		}
+		
 		
 		pos.getPosition().setX(nx);
 		pos.getPosition().setY(ny);
 		pos.getPosition().setZ(nz);
 	}
 
-	public KeyControl(Entity parent){
+	public KeyControl(Entity parent, float speed){
 		
 		this.setType(CompType.KEY_CONTROL);
 		this.setParent(parent);
+		this.speed = speed;
 	}
 }

@@ -1,5 +1,12 @@
 package nComponents;
 
+/**
+ * @author Ryan Clark
+ * 
+ * This class generates a terrain given a blendmap and its textures. In the future a
+ * heightmap may be implemented but that is unncessary for now.
+ */
+
 import models.RawModel;
 import nRenderEngine.Loader;
 import textures.TerrainTexture;
@@ -14,8 +21,7 @@ public class Terrain extends Component {
 	private TerrainTexture blendmap;
 	private RawModel rModel;
 	
-	public void update(float dt) {
-	}
+	public void update(float dt) {}
 
 	public Terrain(Entity parent, Loader loader,
 			TerrainTexturePack texturePack, TerrainTexture blendmap){
@@ -23,10 +29,15 @@ public class Terrain extends Component {
 		this.setType(CompType.TERRAIN);
 		this.setParent(parent);
 		
-		rModel = generateTerrain(loader);
+		this.rModel = generateTerrain(loader);
 		this.texturePack = texturePack;
 		this.blendmap = blendmap;
 	}
+	
+	/**
+	 * @param loader
+	 * @return - flat RawModel with VAO ID and Vertex count
+	 */
 	
 	private RawModel generateTerrain(Loader loader){
 		int count = VERTEX_COUNT * VERTEX_COUNT;
@@ -66,6 +77,10 @@ public class Terrain extends Component {
 		return loader.loadToVAO(vertices, textureCoords, normals, indices);
 	}
 	
+	/**
+	 * Getters and setters for the model and textures.
+	 */
+	
 	public RawModel getRawModel(){
 		return rModel;
 	}
@@ -89,5 +104,4 @@ public class Terrain extends Component {
 	public void setrModel(RawModel rModel) {
 		this.rModel = rModel;
 	}
-	
 }

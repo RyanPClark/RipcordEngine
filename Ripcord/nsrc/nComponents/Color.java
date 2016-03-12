@@ -1,22 +1,20 @@
 package nComponents;
 
+/**
+ * @author Ryan Clark
+ * 
+ * Color component for light sources and potential future entity types
+ */
+
+
 import org.lwjgl.util.vector.Vector3f;
 
 public class Color extends Component {
 
-	float alpha;
-	Vector3f col;
+	private float alpha;
+	private Vector3f col;
 	
-	@Override
-	public void update(float dt) {
-		// TODO Auto-generated method stub
-		// pass
-		
-		///Entity ent = (Entity)getParent();
-		///Rotation rot = (Rotation)ent.getComponentByType(CompType.ROTATION);
-		///rot.getRotation().setX(rot.getRotation().getX()+0.1f);
-		///this.pos.z -= 0.1f;
-	}
+	public void update(float dt) {}
 
 	public Color(Entity parent, Vector3f col, float alpha){
 		
@@ -26,12 +24,15 @@ public class Color extends Component {
 		this.alpha = alpha;
 	}
 	
+	/**
+	 * Getter and setter for Alpha and Color
+	 */
+	
 	public float getAlpha(){
 		return alpha;
 	}
 	
-	public Vector3f getColor(){
-		
+	public Vector3f getColor(){	
 		return col;
 	}
 }

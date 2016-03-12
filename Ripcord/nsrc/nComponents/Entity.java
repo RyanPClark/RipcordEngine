@@ -3,16 +3,21 @@ package nComponents;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author Ryan Clark
+ * 
+ * Each entity has a list of components, which are updated each frame. The class also
+ * provides a method for adding components and a method for getting a component given
+ * its type.
+ *
+ */
+
 public class Entity extends Component{
 
-	public Entity(){
-		
-		components = new ArrayList<Component>();
-	}
+	private List<Component> components = new ArrayList<Component>();
 	
-	@Override
 	public void update(float dt) {
-		// TODO Auto-generated method stub
 		
 		for(Component comp : components){
 			comp.update(dt);
@@ -23,10 +28,8 @@ public class Entity extends Component{
 		
 		for(Component c : components){
 			
-			if(cType == c.getType()){
-				
+			if(cType == c.getType())
 				return c;
-			}
 		}
 		return null;
 	}
@@ -35,6 +38,4 @@ public class Entity extends Component{
 		
 		components.add(comp);
 	}
-	
-	private List<Component> components;
 }

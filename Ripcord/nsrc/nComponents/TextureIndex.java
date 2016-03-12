@@ -1,14 +1,18 @@
 package nComponents;
 
+/**
+ * 
+ * @author Ryan Clark
+ * 
+ * Stores a texture index and ability to calculate its offset for an entity.
+ *
+ */
+
 public class TextureIndex extends Component {
 
-	int index;
+	private int index;
 	
-	@Override
-	public void update(float dt) {
-		// TODO Auto-generated method stub
-		// pass
-	}
+	public void update(float dt) {}
 
 	public TextureIndex(Entity parent, int index){
 		
@@ -17,6 +21,9 @@ public class TextureIndex extends Component {
 		this.index = index;
 	}
 	
+	/**
+	 * @return - the x value of a texture in a texture atlas
+	 */
 	public float getTextureXOffset(){
 		Entity eParent = (Entity)parent;
 		ModelComp mComp = (ModelComp)eParent.getComponentByType(CompType.MODEL);
@@ -24,6 +31,9 @@ public class TextureIndex extends Component {
 		return (float)column/(float)mComp.getModel().getTexture().getNumberOfRows();
 	}
 	
+	/**
+	 * @return - the y value of a texture in a texture atlas
+	 */
 	public float getTextureYOffset(){
 		Entity eParent = (Entity)parent;
 		ModelComp mComp = (ModelComp)eParent.getComponentByType(CompType.MODEL);
@@ -31,8 +41,15 @@ public class TextureIndex extends Component {
 		return (float)row/(float)mComp.getModel().getTexture().getNumberOfRows();
 	}
 	
+	/**
+	 * Getters and setters for the texture index
+	 */
+	
 	public float getIndex(){
-		
 		return index;
+	}
+	
+	public void setIndex(int index){
+		this.index = index;
 	}
 }

@@ -1,6 +1,11 @@
-
 package nRenderEngine;
  
+/**
+ * @author Ryan Clark
+ * 
+ * A typical instanced renderer that processes GUITexts
+ */
+
 import java.util.List;
 import java.util.Map;
  

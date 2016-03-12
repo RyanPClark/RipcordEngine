@@ -1,14 +1,17 @@
 package nComponents;
 
+/**
+ * 
+ * @author Ryan Clark
+ * 
+ * Component that stores a float representing an entity's scale.
+ */
+
 public class Scale extends Component {
 
-	float scale;
+	private float scale;
 	
-	@Override
-	public void update(float dt) {
-		// TODO Auto-generated method stub
-		// pass
-	}
+	public void update(float dt) {}
 
 	public Scale(Entity parent, float scale){
 		
@@ -17,9 +20,11 @@ public class Scale extends Component {
 		this.scale = scale;
 	}
 	
-	
 	public float getScale(){
-		
 		return scale;
+	}
+	
+	public void setScale(float scale){
+		this.scale = scale;
 	}
 }

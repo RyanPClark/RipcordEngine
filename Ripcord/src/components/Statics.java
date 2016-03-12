@@ -57,8 +57,6 @@ public final class Statics {
 	public static final int rotationDeathSpeed = 2;
 	public static final int scaleVariance = 4;
 	
-
-	public static final float distanceBetweenBullets = 70f;
 	public static final float distanceBetweenNumbers = 12f;
 	public static final Vector2f numberPosition = new Vector2f(0.65f, 0.85f);
 	public static final Vector2f numberScale = new Vector2f(0.05f, 0.05f);

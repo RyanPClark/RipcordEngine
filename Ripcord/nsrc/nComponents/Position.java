@@ -1,21 +1,18 @@
 package nComponents;
 
+/**
+ * @author Ryan Clark
+ * 
+ * A component storing a 3D vector representing an entity's position
+ */
+
 import org.lwjgl.util.vector.Vector3f;
 
 public class Position extends Component {
 
-	Vector3f pos;
+	private Vector3f pos;
 	
-	@Override
-	public void update(float dt) {
-		// TODO Auto-generated method stub
-		// pass
-		
-		///Entity ent = (Entity)getParent();
-		///Rotation rot = (Rotation)ent.getComponentByType(CompType.ROTATION);
-		///rot.getRotation().setX(rot.getRotation().getX()+0.1f);
-		///this.pos.z -= 0.1f;
-	}
+	public void update(float dt) {}
 
 	public Position(Entity parent, Vector3f pos){
 		
@@ -23,6 +20,10 @@ public class Position extends Component {
 		this.setParent(parent);
 		this.pos = pos;
 	}
+	
+	/**
+	 * Getter and setter for position
+	 */
 	
 	public void setPosition(Vector3f position){
 		this.pos = position;

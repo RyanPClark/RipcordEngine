@@ -57,7 +57,7 @@ public class MasterRenderer {
 		guiRenderer = new GUIRenderer(loader);
 		ParticleMaster.init(loader, projectionMatrix);
 		shadowMapRenderer = new ShadowMapMasterRenderer(camera);
-		GuiInteraction.init(loader, guiRenderer);
+		GuiInteraction.init(loader);
 	}
 	
 	public static void enableCulling(){
@@ -77,10 +77,6 @@ public class MasterRenderer {
 		
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		
-		if (Display.wasResized()){
-			GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
-		}
-		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		GL11.glClearColor(0, 0, 0, 1);
 		
@@ -89,9 +85,6 @@ public class MasterRenderer {
 	}
 	
 	public void quickPrepare(){
-		if (Display.wasResized()){
-			GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
-		}
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 		GL11.glClearColor(0, 0, 0, 1);
@@ -184,6 +177,7 @@ public class MasterRenderer {
 	
 	public void cleanUp(){
 		
+		guiRenderer.cleanUp();
 		shadowMapRenderer.cleanUp();
 		ParticleMaster.cleanUp();
 		terrainShader.cleanUp();

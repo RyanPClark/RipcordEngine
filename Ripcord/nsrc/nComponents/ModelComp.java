@@ -1,16 +1,18 @@
 package nComponents;
 
+/**
+ * @author Ryan Clark
+ * 
+ * Stores a texture model. That's it.
+ */
+
 import models.TexturedModel;
 
 public class ModelComp extends Component {
 
-	TexturedModel txm;
+	private TexturedModel txm;
 	
-	@Override
-	public void update(float dt) {
-		// TODO Auto-generated method stub
-		// pass
-	}
+	public void update(float dt) {}
 
 	public ModelComp(Entity parent, TexturedModel model){
 		
@@ -19,8 +21,11 @@ public class ModelComp extends Component {
 		this.txm = model;
 	}
 	
+	/**
+	 * Getter and setter.
+	 */
+	
 	public TexturedModel getModel(){
-		
 		return txm;
 	}
 	

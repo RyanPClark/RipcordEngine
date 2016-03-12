@@ -53,7 +53,7 @@ public class NMain {
 		Entity cam = new Entity();
 		cam.addComponent(new Position(cam, new Vector3f(350,75.0f,350)));
 		cam.addComponent(new Rotation(cam, new Vector3f(45,-45,0)));
-		cam.addComponent(new KeyControl(cam));
+		cam.addComponent(new KeyControl(cam, 125.0f));
 		
 		MasterRenderer mRenderer = new MasterRenderer(loader, cam);
 		
@@ -74,7 +74,7 @@ public class NMain {
 		Page homepage = new Page();
 		
 		try {
-			LoadPage.load(font, homepage, loader, "/html/homepage.html");
+			LoadPage.load(homepage, loader, "/html/homepage.html");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -154,7 +154,7 @@ public class NMain {
 			if(!gameloop){
 				render(mRenderer, currentPage);
 				
-				currentPage = currentPage.update(loader, font);
+				currentPage = currentPage.update(loader);
 				
 				if(currentPage == null){
 					gameloop = true;
@@ -170,7 +170,7 @@ public class NMain {
 				float dt = DisplayManager.getDelta();
 				
 				picker.update();
-				
+
 				for(Entity ent : entities){
 					ent.update(dt/1000.0f);
 					Position pos = (Position)ent.getComponentByType(CompType.POSITION);
