@@ -1,5 +1,13 @@
 package objConverter;
- 
+
+import mapBuilding.Box;
+
+/**
+ * Stores vertices, textureCoords, normals, indices, and furthestPoint arrays.
+ * 
+ * @author Ryan Clark
+ */
+
 public class ModelData {
  
     private float[] vertices;
@@ -17,6 +25,43 @@ public class ModelData {
         this.furthestPoint = furthestPoint;
     }
  
+    public Box generateHitbox(){
+    	
+    	float min_x =  20000000;
+    	float max_x = -20000000;
+    	
+    	float min_y =  20000000;
+    	float max_y = -20000000;
+    	
+    	float min_z =  20000000;
+    	float max_z = -20000000;
+    	
+    	for(int i = 0; i < vertices.length; i++){
+    		if(i % 3 == 0){
+    			min_x = Math.min(min_x, vertices[i]);
+    			max_x = Math.max(max_x, vertices[i]);
+    		}
+    		else if(i % 3 == 1){
+    			min_y = Math.min(min_y, vertices[i]);
+    			max_y = Math.max(max_y, vertices[i]);
+    		}
+    		else {
+    			min_z = Math.min(min_z, vertices[i]);
+    			max_z = Math.max(max_z, vertices[i]);
+    		}
+    	}
+    	
+    	Box b = new Box(max_y, min_y, min_x, max_x, min_z, max_z);
+    	
+    	return b;
+    }
+    
+    
+    
+    /**
+     * Getters and setters for the data
+     */
+    
     public float[] getVertices() {
         return vertices;
     }
@@ -56,6 +101,4 @@ public class ModelData {
 	public void setFurthestPoint(float furthestPoint) {
 		this.furthestPoint = furthestPoint;
 	}
- 
-    
 }

@@ -1,5 +1,11 @@
 package nRenderEngine;
 
+/**
+ * @author Ryan Clark
+ * 
+ * This class renders the terrain(s). It does not use instanced rendering.
+ */
+
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;

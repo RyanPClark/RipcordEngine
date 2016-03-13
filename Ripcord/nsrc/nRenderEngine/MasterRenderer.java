@@ -1,5 +1,11 @@
 package nRenderEngine;
 
+/**
+ * @author Ryan Clark
+ * 
+ * This class manages almost all rendering and shading.
+ */
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +23,7 @@ import guis.GuiTexture;
 import models.TexturedModel;
 import nComponents.CompType;
 import nComponents.Entity;
+import nComponents.Hitbox;
 import nComponents.ModelComp;
 import nShaders.StaticShader;
 import nShaders.TerrainShader;
@@ -100,7 +107,7 @@ public class MasterRenderer {
 	public void Render(Entity light, Entity camera){
 		
 		prepare();
-
+		
 		shader.start();
 		shader.loadViewMatrix(camera);
 		shader.loadLight(light);
@@ -133,10 +140,27 @@ public class MasterRenderer {
 		terrains.add(terrain);
 	}
 	
+	/**
+	 * Adds an entity and its textured model to the entity map. If the entity has a
+	 * hitbox with rendering enabled, then the hitbox texturedModel is used instead.
+	 * 
+	 * @param ent - Entity to be added to the map
+	 */
+	
 	public void processEntity(Entity ent){
 		
+		TexturedModel model;
+		
 		ModelComp mComp = (ModelComp)ent.getComponentByType(CompType.MODEL);
-		TexturedModel model = mComp.getModel();
+		model = mComp.getModel();
+		
+		Hitbox hitbox = (Hitbox)ent.getComponentByType(CompType.HIT_BOX);
+		if(hitbox != null){
+			if(hitbox.isRender()){
+				model = hitbox.getBox().getModel();
+			}
+		}
+		
 		List<Entity> batch = entities.get(model);
 		if(batch != null){
 			batch.add(ent);

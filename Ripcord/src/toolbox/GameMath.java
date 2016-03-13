@@ -1,15 +1,26 @@
 package toolbox;
 
+/**
+ * TODO Add scaling, positioning, and rotating to hitbox intersection algorithm
+ * 
+ * Random math used in the game can be found here
+ * 
+ * @author Ryan Clark
+ */
+
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import entities.Camera;
+import mapBuilding.Box;
 import nComponents.CompType;
 import nComponents.Entity;
 import nComponents.Position;
 import nComponents.Rotation;
+import nComponents.Scale;
+import nToolbox.Ray;
 
 public final class GameMath {
 	
@@ -19,6 +30,82 @@ public final class GameMath {
 	
 	private static final float PI = 3.14159265f;
 	
+	public static boolean intersection(Box b, Ray r, Entity camera){
+		
+		Vector3f min3 = new Vector3f(b.getBounds()[0]);
+		Vector3f max3 = new Vector3f(b.getBounds()[1]);
+		
+		/* Load transformation variables */
+		
+		Scale cScale = (Scale)camera.getComponentByType(CompType.SCALE);
+		float scale = cScale.getScale();
+		
+		Rotation cRot = (Rotation)camera.getComponentByType(CompType.ROTATION);
+		Vector3f rotation = cRot.getRotation();
+		
+		Position cPos = (Position)camera.getComponentByType(CompType.POSITION);
+		Vector3f position = cPos.getPosition();
+		
+		Matrix4f translationMatrix = GameMath.createTransformationMatrix(position, rotation.x, rotation.y, rotation.z, new Vector3f(scale,scale,scale));
+		Vector4f min = new Vector4f(min3.x,min3.y,min3.z,1);
+		Vector4f max = new Vector4f(max3.x,max3.y,max3.z,1);
+		
+		Matrix4f.transform(translationMatrix, min, min);
+		Matrix4f.transform(translationMatrix, max, max);
+		
+		/* Calculate intersection */
+		
+		float tx1 = (min.x-r.getOrigin().x)*r.getInv_direction().x;
+		float tx2 = (max.x-r.getOrigin().x)*r.getInv_direction().x;
+		
+		float tmin = Math.min(tx1, tx2);
+		float tmax = Math.max(tx1, tx2);
+		
+		float ty1 = (min.y-r.getOrigin().y)*r.getInv_direction().y;
+		float ty2 = (max.y-r.getOrigin().y)*r.getInv_direction().y;
+		
+		tmin = Math.max(tmin, Math.min(ty1, ty2));
+		tmax = Math.min(tmax, Math.max(ty1, ty2));
+		
+		float tz1 = (min.z-r.getOrigin().z)*r.getInv_direction().z;
+		float tz2 = (max.z-r.getOrigin().z)*r.getInv_direction().z;
+		
+		tmin = Math.max(tmin, Math.min(tz1, tz2));
+		tmax = Math.min(tmax, Math.max(tz1, tz2));
+		
+		return tmax >= tmin && tmax >= 0;
+	}
+	
+	public static boolean inBox(Box box, Ray r, float t0, float t1){
+		
+		float tmin, tmax, tymin, tymax, tzmin, tzmax;
+		
+		tmin = (box.getBounds()[r.getSign()[0]].x - r.getOrigin().x) * r.getInv_direction().x;
+		tmax = (box.getBounds()[1-r.getSign()[0]].x - r.getOrigin().x) * r.getInv_direction().x;
+		tymin = (box.getBounds()[r.getSign()[1]].y - r.getOrigin().y) * r.getInv_direction().y;
+		tymax = (box.getBounds()[1-r.getSign()[1]].y - r.getOrigin().y) * r.getInv_direction().y;
+		
+		if ( (tmin > tymax) || (tymin > tmax) )
+			return false;
+		if (tymin > tmin)
+			tmin = tymin;
+		if (tymax < tmax)
+			tmax = tymax;
+
+		tzmin = (box.getBounds()[r.getSign()[2]].z - r.getOrigin().z) * r.getInv_direction().z;
+		tzmax = (box.getBounds()[1-r.getSign()[2]].z - r.getOrigin().z) * r.getInv_direction().z;
+		
+		System.out.println((tmin > tzmax) + ", " + (tzmin > tmax));
+		
+		if ( (tmin > tzmax) || (tzmin > tmax) )
+			return false;
+		if (tzmin > tmin)
+			tmin = tzmin;
+		if (tzmax < tmax)
+			tmax = tzmax;
+		
+		return ( (tmin < t1) && (tmax > t0) );
+	}
 	public static float barryCentric(Vector3f p1, Vector3f p2, Vector3f p3, Vector2f pos) {
 		float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
 		float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;

@@ -1,5 +1,13 @@
 package nToolbox;
 
+/**
+ * @author Ryan Clark
+ * 
+ * Reverses the shader matrix math to determine what the mouse is pointing at
+ * implements this to calculate point on the terrain.
+ * TODO add ray-box intersection
+ */
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
@@ -16,6 +24,8 @@ public class MousePicker {
 	
 	private static final int RECURSION_COUNT = 200;
 	private static final float RAY_RANGE = 600;
+	
+	private Ray cameraRay;
 	
 	private Vector3f currentRay = new Vector3f();
 
@@ -43,11 +53,15 @@ public class MousePicker {
 		viewMatrix = GameMath.createViewMatrix(camera);
 		currentRay = calculateMouseRay();
 		
-		if (intersectionInRange(0, RAY_RANGE, currentRay)) {
-			currentTerrainPoint = binarySearch(0, 0, RAY_RANGE, currentRay);
-		} else {
-			currentTerrainPoint = null;
-		}
+		setCameraRay(new Ray(getCameraPosition(camera), currentRay));
+		
+		currentTerrainPoint = intersectionInRange(0, RAY_RANGE, currentRay) ?
+				binarySearch(0,0,RAY_RANGE,currentRay) : null;
+	}
+	
+	private Vector3f getCameraPosition(Entity camera){
+		Position pos = (Position)camera.getComponentByType(CompType.POSITION);
+		return pos.getPosition();
 	}
 	
 	private Vector3f calculateMouseRay() {
@@ -123,5 +137,13 @@ public class MousePicker {
 		} else {
 			return false;
 		}
+	}
+
+	public Ray getCameraRay() {
+		return cameraRay;
+	}
+
+	public void setCameraRay(Ray cameraRay) {
+		this.cameraRay = cameraRay;
 	}
 }

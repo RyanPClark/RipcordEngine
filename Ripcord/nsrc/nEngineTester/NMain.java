@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -16,11 +15,12 @@ import fontMeshCreator.TextMaster;
 import guis.GuiTexture;
 import html.LoadPage;
 import html.Page;
+import mapBuilding.Box;
 import models.RawModel;
 import models.TexturedModel;
 import nComponents.Color;
-import nComponents.CompType;
 import nComponents.Entity;
+import nComponents.Hitbox;
 import nComponents.KeyControl;
 import nComponents.ModelComp;
 import nComponents.Position;
@@ -66,6 +66,7 @@ public class NMain {
 		texture.setShine_damper(10.0f);
 		texture.setNumberOfRows(1);
 		TexturedModel tModel = new TexturedModel(model, texture);
+		//TexturedModel tHModel = new TexturedModel(hitModel, texture);
 		
 		List<Entity> entities = new ArrayList<Entity>();
 		List<Entity> terrains = new ArrayList<Entity>();
@@ -93,12 +94,18 @@ public class NMain {
 		
 		/* Finished with test fonts */
 		
+		MousePicker picker = new MousePicker(cam, mRenderer.getProjectionMatrix());
+		
+		Box hitbox = data.generateHitbox();
+		hitbox.generateModel(loader);
+		
 		for(int i = 0; i < 1; i++){
 			Entity ent = new Entity();
 			ent.addComponent(new Position(ent, new Vector3f(0,0,0)));
-			ent.addComponent(new Rotation(ent, new  Vector3f(0,0,0)));
+			ent.addComponent(new Rotation(ent, new Vector3f(0,0,0)));
 			ent.addComponent(new Scale(ent, 2.0f));
 			ent.addComponent(new ModelComp(ent, tModel));
+			ent.addComponent(new Hitbox(ent, hitbox, picker));
 			ent.addComponent(new TextureIndex(ent, 0));
 
 			entities.add(ent);
@@ -111,16 +118,6 @@ public class NMain {
 		light.addComponent(new Color(light, new Vector3f(1,1,1), 2.0f));
 		
 		/* done with light */
-		
-		MousePicker picker = new MousePicker(cam, mRenderer.getProjectionMatrix());
-		
-		//GuiTexture gui = new GuiTexture(loader.loadTexture(MyPaths.makeTexturePath("Guis/resumeGame")),
-		//		new Vector2f(-0.8f,0.8f), new Vector2f(0.2f,0.2f));
-		
-		//guis.add(gui);
-		
-		//GuiTexture shadowMap = new GuiTexture(mRenderer.getShadowMapTexture(), new Vector2f(0.5f,0.5f), new Vector2f(0.5f, 0.5f));
-		//guis.add(shadowMap);
 		
 		/* TERRAIN GENERATION HERE */
 		
@@ -146,60 +143,59 @@ public class NMain {
 		/* END TERRAIN GENERATION */
 		
 		boolean gameloop = false;
-		
 		Page currentPage = homepage;
 		
 		while(!Display.isCloseRequested()){
 			
 			if(!gameloop){
 				render(mRenderer, currentPage);
-				
 				currentPage = currentPage.update(loader);
-				
-				if(currentPage == null){
-					gameloop = true;
-				}
-				
-				if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-					currentPage.unload();
-					gameloop = true;
-				}
+				gameloop = currentPage == null;
 			}
 			else {
-				
 				float dt = DisplayManager.getDelta();
-				
-				picker.update();
-
-				for(Entity ent : entities){
-					ent.update(dt/1000.0f);
-					Position pos = (Position)ent.getComponentByType(CompType.POSITION);
-					pos.setPosition(picker.getCurrentTerrainPoint());
-				}
-				
-				
-				cam.update(dt/1000.0f);
-				
-				Vector3f color = TerrainColor.getColor(picker.getCurrentTerrainPoint());
-				
-				if(color.y > 100 || color.x > 100){
-					textYes.setRender(true);
-					textNo.setRender(false);
-				}
-				else {
-					textYes.setRender(false);
-					textNo.setRender(true);
-				}
-				
+				mandatoryUpdates(picker, entities, cam, dt);
+				testColorFunction(picker, textYes, textNo);
 				render(cam, mRenderer, entities, terrains, guis, light);
 			}
-			
 		}
 		
 		TextMaster.cleanUp();
 		mRenderer.cleanUp();
 		loader.cleanUP();
 		DisplayManager.closeDisplay();
+	}
+	
+	/**
+	 * Updates the camera, picker, and entities.
+	 */
+	private static void mandatoryUpdates(MousePicker picker, List<Entity> entities,
+			Entity cam, float dt){
+		picker.update();
+		for(Entity ent : entities){
+			ent.update(dt/1000.0f);
+		}
+		cam.update(dt/1000.0f);
+	}
+	
+	/**
+	 * Temporary function that displays one text if the mouse is over the road and another if not
+	 * 
+	 * @param picker  - The mouse picker
+	 * @param textYes - The premade text that displays "You can put the entity here"
+	 * @param textNo  - The premade text that displays "You cannot put the entity here"
+	 */
+	private static void testColorFunction(MousePicker picker, GUIText textYes, GUIText textNo){
+		Vector3f color = TerrainColor.getColor(picker.getCurrentTerrainPoint());
+		
+		if(color.y > 100 || color.x > 100){
+			textYes.setRender(true);
+			textNo.setRender(false);
+		}
+		else {
+			textYes.setRender(false);
+			textNo.setRender(true);
+		}
 	}
 	
 	private static void render(MasterRenderer mRenderer, Page page){

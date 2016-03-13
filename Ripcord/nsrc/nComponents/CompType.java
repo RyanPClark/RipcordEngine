@@ -11,7 +11,7 @@ package nComponents;
 public enum CompType {
 
 	POSITION(0), ROTATION(1), SCALE(2), MODEL(3), KEY_CONTROL(4), COLOR(5),
-	TERRAIN(6), TEXTURE_INDEX(7);
+	TERRAIN(6), TEXTURE_INDEX(7), HIT_BOX(8);
 	
 	public final int type;
 	

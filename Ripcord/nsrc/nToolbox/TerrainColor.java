@@ -1,5 +1,12 @@
 package nToolbox;
 
+/**
+ * @author Ryan Clark
+ * 
+ * Basic class that uses the mouse picker and blendmap to calculate what
+ * the blendmap color of the terrain the mouse is over.
+ */
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,11 +26,10 @@ public class TerrainColor {
 	private static BufferedImage image;
 	
 	public static void load(String filename, int mapSize){
-		image = null;
+		
 		try {
 			image = ImageIO.read(new File(filename));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -33,9 +39,15 @@ public class TerrainColor {
 	
 	public static Vector3f getColor(Vector3f vec){
 		
-		float x = BLEND_MAP_SIZE * (    (0.5f + vec.x / MAP_SIZE));
-		float z = BLEND_MAP_SIZE * (0 + (0.5f + vec.z / MAP_SIZE));
+		float x = 0, z = 0;
 		
+		try{
+			x = BLEND_MAP_SIZE * (    (0.5f + vec.x / MAP_SIZE));
+			z = BLEND_MAP_SIZE * (0 + (0.5f + vec.z / MAP_SIZE));
+		}
+		catch(NullPointerException e){
+			e.printStackTrace();
+		}
 		//System.out.println(x + ", " + z);
 		
 		if(x < 0 || x >= image.getHeight()/Statics.TERRAIN_RES ||z < 0 || z >= image.getHeight()/Statics.TERRAIN_RES ){
