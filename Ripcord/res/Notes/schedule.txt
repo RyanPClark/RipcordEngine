@@ -1,8 +1,6 @@
-11603.10 : Normal mapping
+11603.18 : Normal mapping
 11603.19 : OpenAL initial implementation
 11603.20 : Minimap
-11603.21 : Hitboxes
-11603.22 : ...
 11603.23 : Entity Selection
 11603.24 : ...
 11603.25 : ...

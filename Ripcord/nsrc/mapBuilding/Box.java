@@ -21,6 +21,7 @@ public class Box {
 	private Vector3f bounds[] = new Vector3f[2];
 	private TexturedModel model;
 	private boolean selected;
+	private boolean render;
 	
 	public Box(){}
 	
@@ -111,5 +112,13 @@ public class Box {
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+
+	public boolean isRender() {
+		return render;
+	}
+
+	public void setRender(boolean render) {
+		this.render = render;
 	}
 }

@@ -29,9 +29,7 @@ public class TerrainColor {
 		
 		try {
 			image = ImageIO.read(new File(filename));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (IOException e) {}
 		
 		BLEND_MAP_SIZE = image.getHeight();
 		MAP_SIZE = mapSize;

@@ -25,8 +25,7 @@ public class Hitbox extends Component{
 			//boolean inBox = GameMath.inBox(getBox(), picker.getCameraRay(), 0, -1000);
 			
 			boolean intersected = GameMath.intersection(box, picker.getCameraRay(), (Entity)parent);
-			
-			System.out.println(intersected);
+			box.setSelected(intersected);
 		}
 	}
 	
@@ -42,7 +41,7 @@ public class Hitbox extends Component{
 	 */
 	
 	public boolean isRender(){
-		return box.isSelected();
+		return box.isRender();
 	}
 	
 	/**

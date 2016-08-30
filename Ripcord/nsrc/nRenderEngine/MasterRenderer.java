@@ -56,6 +56,8 @@ public class MasterRenderer {
 	
 	private Matrix4f projectionMatrix;
 	
+	private boolean renderText = true;
+	
 	public MasterRenderer(Loader loader, Entity camera){
 		
 		createProjectionMatrix();
@@ -125,7 +127,8 @@ public class MasterRenderer {
 		ParticleMaster.update();
 		ParticleMaster.render(camera);
 		
-		TextMaster.render();
+		if(renderText)
+			TextMaster.render();
 		
 		terrains.clear();
 		entities.clear();
@@ -206,5 +209,13 @@ public class MasterRenderer {
 		ParticleMaster.cleanUp();
 		terrainShader.cleanUp();
 		shader.cleanUp();
+	}
+
+	public boolean isRenderText() {
+		return renderText;
+	}
+
+	public void setRenderText(boolean renderText) {
+		this.renderText = renderText;
 	}
 }

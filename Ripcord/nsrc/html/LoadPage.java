@@ -22,6 +22,7 @@ import org.lwjgl.util.vector.Vector2f;
 
 import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
+import guis.ActionType;
 import guis.GuiTexture;
 import nRenderEngine.Loader;
 import toolbox.MyPaths;
@@ -198,7 +199,7 @@ public class LoadPage {
 					new Vector2f(x+width,y-height), new Vector2f(width,height));
 			
 			gui.setFrame(frame);
-			gui.setActionID(actionID);
+			gui.setActionID(ActionType.values()[actionID]);
 			gui.setActionData(actionData);
 			
 			if(!isAbs){

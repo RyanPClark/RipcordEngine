@@ -1,6 +1,7 @@
 package nComponents;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 /**
@@ -19,9 +20,11 @@ public class Entity extends Component{
 	
 	public void update(float dt) {
 		
+		try{
 		for(Component comp : components){
 			comp.update(dt);
-		}
+		}}
+		catch(ConcurrentModificationException e){}
 	}
 
 	public Component getComponentByType(CompType cType){
@@ -37,5 +40,10 @@ public class Entity extends Component{
 	public void addComponent(Component comp){
 		
 		components.add(comp);
+	}
+	
+	public void removeComponent(Component comp){
+		
+		components.remove(comp);
 	}
 }

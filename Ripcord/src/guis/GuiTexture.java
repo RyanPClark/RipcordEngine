@@ -10,7 +10,7 @@ public final class GuiTexture {
 	private int texture;
 	private Vector2f position, scale;
 	private Matrix4f matrix;
-	private int actionID;
+	private ActionType actionID;
 	private String actionData;
 	private boolean frame=false;
 	private boolean inArea=false;
@@ -63,11 +63,11 @@ public final class GuiTexture {
 		this.frame = frame;
 	}
 
-	public int getActionID() {
+	public ActionType getActionID() {
 		return actionID;
 	}
 
-	public void setActionID(int actionID) {
+	public void setActionID(ActionType actionID) {
 		this.actionID = actionID;
 	}
 

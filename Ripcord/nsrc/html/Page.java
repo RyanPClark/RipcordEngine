@@ -17,6 +17,7 @@ import org.lwjgl.input.Mouse;
 
 import fontMeshCreator.GUIText;
 import fontMeshCreator.TextMaster;
+import guis.ActionType;
 import guis.GuiInteraction;
 import guis.GuiTexture;
 import nRenderEngine.Loader;
@@ -40,7 +41,7 @@ public class Page {
 			if(!GuiInteraction.isClicked(gui))
 				continue;
 				
-			if(gui.getActionID() == 1){
+			if(gui.getActionID() == ActionType.HREF){
 				
 				try {
 					LoadPage.load(this, loader, gui.getActionData());
@@ -49,7 +50,7 @@ public class Page {
 				}
 				return this;
 			}
-			else if(gui.getActionID() == 2){
+			else if(gui.getActionID() == ActionType.BEGIN_GAME){
 				unload();
 				return null;
 			}

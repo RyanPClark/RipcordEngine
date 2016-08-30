@@ -10,7 +10,7 @@ public class ModelTexture {
 	private boolean hasTransparency;
 	private boolean useFakeLighting;
 	
-	private int numberOfRows;
+	private int numberOfRows=1;
 	
 	public boolean isUseFakeLighting() {
 		return useFakeLighting;
