@@ -84,6 +84,10 @@ public class Entity extends Component{
 			{
 				addComponent(new PickerControl(this, picker, entities));
 			}
+			else if(rootString.equals("IDL:"))
+			{
+				addComponent(new Idle(this, Integer.parseInt(args[0])));
+			}
 			else if(rootString.equals("SUB:"))
 			{
 				Entity ent = new Entity();
@@ -95,7 +99,6 @@ public class Entity extends Component{
 			}
 			else if(rootString.equals("END:"))
 			{
-				System.out.println("Components.length: " + components.length + ", index: " + index);
 				return Arrays.copyOfRange(components, index, components.length);
 			}
 		}

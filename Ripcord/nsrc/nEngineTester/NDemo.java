@@ -141,9 +141,10 @@ public class NDemo {
 				"POS:0:0:0 ROT:0:0:0 SCL:0.1" + " MDL:bower:bower:true INX:0 PCT: ",
 				"POS:0:0:0 ROT:0:0:0 SCL:0.45" + " MDL:rocker:rocker:true INX:0 PCT: ",
 				"POS:0:0:0 ROT:0:0:0 SCL:3" + " MDL:build10:build10:true INX:0 PCT: ",
-				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:totalcrap:totalcrap:true INX:0 PCT: ",
-				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:turret-base:sci_fi_turret_4_diffuse:true INX:0 PCT: SUB: " + 
-				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:turret-top:sci_fi_turret_4_diffuse:false INX:0 PCT: END:"
+				"POS:0:0:0 ROT:0:0:0 SCL:6" + " MDL:air-turret-base:mcor_d_sentry_gun_d:true INX:0 PCT: SUB: " + 
+						"POS:0:0:5 ROT:-30:0:0 SCL:1" + " MDL:air-turret-top:mcor_d_sentry_gun_d:false INX:0 IDL:200 END:",
+				"POS:0:0:0 ROT:0:0:0 SCL:3" + " MDL:turret-base:sci_fi_turret_4_diffuse:true INX:0 PCT: SUB: " + 
+				"POS:0:0:0 ROT:0:30:0 SCL:1" + " MDL:turret-top:sci_fi_turret_4_diffuse:false INX:0 IDL:200 END:"
 				};
 		String[] data_sub2 = {
 				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:totalcrap:totalcrap:true INX:0 PCT: ",
@@ -154,9 +155,6 @@ public class NDemo {
 				"POS:0:40:0 ROT:0:0:0 SCL:7.3" + " MDL:fighter:fighter:true INX:0 PCT: "
 				};
 		String[][] data = {data_sub1, data_sub2};
-		
-		//String data0 = "POS:0:0:0 ROT:0:0:0 SCL:5" + " MDL:totalcrap"+":totalcrap:true INX:0 PCT: ";//SUB: "
-				//+ "POS:0:30:0 ROT:180:0:0 SCL:1 MDL:"+parts[0]+":"+parts[0]+":false INX:0 END:";
 		
 		for(int i = 0; i < 2; i++){
 			for(int j = 0; j < 6; j++){
