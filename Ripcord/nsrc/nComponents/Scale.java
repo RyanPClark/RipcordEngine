@@ -1,5 +1,6 @@
 package nComponents;
 
+
 /**
  * 
  * @author Ryan Clark
@@ -18,6 +19,33 @@ public class Scale extends Component {
 		this.setType(CompType.SCALE);
 		this.setParent(parent);
 		this.scale = scale;
+	}
+	
+	public float getMultiplicativeScale(){
+		
+		Entity ent = (Entity)parent;
+		Entity origEnt = ent;
+		
+		float scale = 1;
+		
+		while(true){
+			
+			// get position
+			Scale sComp = (Scale)ent.getComponentByType(CompType.SCALE);
+			float nscale = (sComp != null ? sComp.getScale() : 1);
+			scale *= nscale;
+			
+			if(ent.getParent() != null){
+				ent = (Entity)ent.getParent();
+			}
+			else {
+				break;
+			}
+		}
+		
+		parent = origEnt;
+		
+		return scale;
 	}
 	
 	public float getScale(){

@@ -90,12 +90,18 @@ public class ShadowMapEntityRenderer {
 	 *            - the entity to be prepared for rendering.
 	 */
 	private void prepareInstance(Entity entity) {
-		Position pos = (Position)entity.getComponentByType(CompType.POSITION);
-		Rotation rot = (Rotation)entity.getComponentByType(CompType.ROTATION);
-		Scale scale = (Scale)entity.getComponentByType(CompType.SCALE);
 		
-		Matrix4f modelMatrix = GameMath.createTransformationMatrix(pos.getPosition(),
-				rot.getRotation().x, rot.getRotation().y, rot.getRotation().z, new Vector3f(scale.getScale(), scale.getScale(), scale.getScale()));
+		Position pComp = (Position)entity.getComponentByType(CompType.POSITION);
+		Vector3f pos = pComp.getAdditivePosition();
+		
+		Rotation rComp = (Rotation)entity.getComponentByType(CompType.ROTATION);
+		Vector3f rot = rComp.getAdditiveRotation();
+		
+		Scale sComp = (Scale)entity.getComponentByType(CompType.SCALE);
+		float scale = sComp.getMultiplicativeScale();
+		
+		Matrix4f modelMatrix = GameMath.createTransformationMatrix(pos,
+				rot.x, rot.y, rot.z, new Vector3f(scale, scale, scale));
 		Matrix4f mvpMatrix = Matrix4f.mul(projectionViewMatrix, modelMatrix, null);
 		shader.loadMvpMatrix(mvpMatrix);
 	}

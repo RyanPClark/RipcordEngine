@@ -3,6 +3,7 @@ package mapBuilding;
 import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
+import nComponents.Position;
 import nRenderEngine.Loader;
 import textures.ModelTexture;
 
@@ -20,8 +21,7 @@ public class Box {
 	
 	private Vector3f bounds[] = new Vector3f[2];
 	private TexturedModel model;
-	private boolean selected;
-	private boolean render;
+	private Position parentPos;
 	
 	public Box(){}
 	
@@ -84,6 +84,8 @@ public class Box {
 				loader.loadToVAO(vertices, textureCoords, normals, indices),
 				new ModelTexture(-1)
 			);
+		//System.out.println("MIN: " + bounds[0].x + ", " + bounds[0].y + ", " + bounds[0].z);
+		//System.out.println("MAX: " + bounds[1].x + ", " + bounds[1].y + ", " + bounds[1].z);
 	}
 
 	/**
@@ -106,19 +108,11 @@ public class Box {
 		this.model = model;
 	}
 
-	public boolean isSelected() {
-		return selected;
+	public Position getParentPos() {
+		return parentPos;
 	}
 
-	public void setSelected(boolean selected) {
-		this.selected = selected;
-	}
-
-	public boolean isRender() {
-		return render;
-	}
-
-	public void setRender(boolean render) {
-		this.render = render;
+	public void setParentPos(Position parentPos) {
+		this.parentPos = parentPos;
 	}
 }

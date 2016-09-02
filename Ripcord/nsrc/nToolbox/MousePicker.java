@@ -25,6 +25,8 @@ public class MousePicker {
 	private static final int RECURSION_COUNT = 200;
 	private static final float RAY_RANGE = 600;
 	
+	private static boolean unit_selected;
+	
 	private Ray cameraRay;
 	
 	private Vector3f currentRay = new Vector3f();
@@ -57,6 +59,8 @@ public class MousePicker {
 		
 		currentTerrainPoint = intersectionInRange(0, RAY_RANGE, currentRay) ?
 				binarySearch(0,0,RAY_RANGE,currentRay) : null;
+		
+		MousePicker.setUnit_selected(false);
 	}
 	
 	private Vector3f getCameraPosition(Entity camera){
@@ -145,5 +149,13 @@ public class MousePicker {
 
 	public void setCameraRay(Ray cameraRay) {
 		this.cameraRay = cameraRay;
+	}
+
+	public static boolean isUnit_selected() {
+		return unit_selected;
+	}
+
+	public static void setUnit_selected(boolean unit_selected) {
+		MousePicker.unit_selected = unit_selected;
 	}
 }

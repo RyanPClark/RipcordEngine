@@ -7,18 +7,24 @@ package nComponents;
  */
 
 import models.TexturedModel;
+import nRenderEngine.MasterRenderer;
 
 public class ModelComp extends Component {
 
 	private TexturedModel txm;
+	private MasterRenderer mRenderer;
 	
-	public void update(float dt) {}
+	public void update(float dt) {
+		Entity eParent = (Entity)parent;
+		mRenderer.processEntity(eParent);
+	}
 
-	public ModelComp(Entity parent, TexturedModel model){
+	public ModelComp(Entity parent, TexturedModel model, MasterRenderer mRenderer){
 		
 		this.setType(CompType.MODEL);
 		this.setParent(parent);
 		this.txm = model;
+		this.mRenderer = mRenderer;
 	}
 	
 	/**

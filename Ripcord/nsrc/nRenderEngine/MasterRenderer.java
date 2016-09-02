@@ -23,7 +23,6 @@ import guis.GuiTexture;
 import models.TexturedModel;
 import nComponents.CompType;
 import nComponents.Entity;
-import nComponents.Hitbox;
 import nComponents.ModelComp;
 import nShaders.StaticShader;
 import nShaders.TerrainShader;
@@ -157,12 +156,14 @@ public class MasterRenderer {
 		ModelComp mComp = (ModelComp)ent.getComponentByType(CompType.MODEL);
 		model = mComp.getModel();
 		
+		/*
 		Hitbox hitbox = (Hitbox)ent.getComponentByType(CompType.HIT_BOX);
 		if(hitbox != null){
 			if(hitbox.isRender()){
 				model = hitbox.getBox().getModel();
 			}
 		}
+		*/
 		
 		List<Entity> batch = entities.get(model);
 		if(batch != null){

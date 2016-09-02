@@ -13,7 +13,7 @@ public abstract class Component {
 
 	public abstract void update(float dt);
 	
-	protected Component parent;
+	protected Component parent = null;
 	private CompType type;
 	
 	public Component getParent() {

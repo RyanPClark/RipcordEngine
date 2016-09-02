@@ -30,20 +30,20 @@ public final class GameMath {
 	
 	private static final float PI = 3.14159265f;
 	
-	public static boolean intersection(Box b, Ray r, Entity camera){
+	public static boolean intersection(Box b, Ray r, Entity entity){
 		
 		Vector3f min3 = new Vector3f(b.getBounds()[0]);
 		Vector3f max3 = new Vector3f(b.getBounds()[1]);
 		
 		/* Load transformation variables */
 		
-		Scale cScale = (Scale)camera.getComponentByType(CompType.SCALE);
+		Scale cScale = (Scale)entity.getComponentByType(CompType.SCALE);
 		float scale = cScale.getScale();
 		
-		Rotation cRot = (Rotation)camera.getComponentByType(CompType.ROTATION);
+		Rotation cRot = (Rotation)entity.getComponentByType(CompType.ROTATION);
 		Vector3f rotation = cRot.getRotation();
 		
-		Position cPos = (Position)camera.getComponentByType(CompType.POSITION);
+		Position cPos = (Position)entity.getComponentByType(CompType.POSITION);
 		Vector3f position = cPos.getPosition();
 		
 		Matrix4f translationMatrix = GameMath.createTransformationMatrix(position, rotation.x, rotation.y, rotation.z, new Vector3f(scale,scale,scale));

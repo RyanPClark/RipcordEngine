@@ -21,6 +21,33 @@ public class Position extends Component {
 		this.pos = pos;
 	}
 	
+	public Vector3f getAdditivePosition(){
+		
+		Entity ent = (Entity)parent;
+		Entity origEnt = ent;
+		
+		Vector3f position = new Vector3f(0,0,0);
+		
+		while(true){
+			
+			// get position
+			Position pComp = (Position)ent.getComponentByType(CompType.POSITION);
+			Vector3f nposition = (pComp != null ? pComp.getPosition() : new Vector3f(0,0,0));
+			Vector3f.add(position, nposition, position);
+			
+			if(ent.getParent() != null){
+				ent = (Entity)ent.getParent();
+			}
+			else {
+				break;
+			}
+		}
+		
+		parent = origEnt;
+		
+		return position;
+	}
+	
 	/**
 	 * Getter and setter for position
 	 */

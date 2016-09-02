@@ -93,17 +93,15 @@ public class Renderer {
 	 */
 	
 	private void prepareInstance(Entity ent){
-		// get position
+		
 		Position pComp = (Position)ent.getComponentByType(CompType.POSITION);
-		Vector3f position = (pComp != null ? pComp.getPosition() : new Vector3f(0,0,0));
+		Vector3f position = pComp.getAdditivePosition();
 		
-		// get rotation
 		Rotation rComp = (Rotation)ent.getComponentByType(CompType.ROTATION);
-		Vector3f rotation = (rComp != null ? rComp.getRotation() : new Vector3f(0,0,0));
-		
-		// get scale
+		Vector3f rotation = rComp.getAdditiveRotation();
+
 		Scale sComp = (Scale)ent.getComponentByType(CompType.SCALE);
-		float scale = (sComp != null ? sComp.getScale() : 0.0f);
+		float scale = sComp.getMultiplicativeScale();
 		
 		// load transformation matrix
 		Matrix4f matrix = GameMath.createTransformationMatrix(position, rotation.x,
