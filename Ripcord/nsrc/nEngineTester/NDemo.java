@@ -136,9 +136,27 @@ public class NDemo {
 		String[] icons_sub2 = {"guis/128-infantry", "guis/128-car", "guis/128-tank", "guis/128-helicopter", "guis/128-mech", "guis/128-air-strike"};
 		String[][] icons = {icons_sub1, icons_sub2};
 		
-		String[] data_sub1 = {"totalcrap 5", "bower 0.1", "rocker 0.45", "build10 3", "totalcrap 1", "totalcrap 1"};
-		String[] data_sub2 = {"totalcrap 1", "humvee 4.5", "lowpoly-tank 4", "totalcrap 1", "totalcrap 1", "fighter 7.3"};
+		String[] data_sub1 = {
+				"POS:0:0:0 ROT:0:0:0 SCL:5" + " MDL:totalcrap:totalcrap:true INX:0 PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:0.1" + " MDL:bower:bower:true INX:0 PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:0.45" + " MDL:rocker:rocker:true INX:0 PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:3" + " MDL:build10:build10:true INX:0 PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:totalcrap:totalcrap:true INX:0 PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:turret-base:sci_fi_turret_4_diffuse:true INX:0 PCT: SUB: " + 
+				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:turret-top:sci_fi_turret_4_diffuse:false INX:0 PCT: END:"
+				};
+		String[] data_sub2 = {
+				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:totalcrap:totalcrap:true INX:0 PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:4.5" + " MDL:humvee:humvee:true INX:0 PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:4" + " MDL:lowpoly-tank:lowpoly-tank:true INX:0 PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:totalcrap:totalcrap:true INX:0 PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:totalcrap:totalcrap:true INX:0 PCT: ",
+				"POS:0:40:0 ROT:0:0:0 SCL:7.3" + " MDL:fighter:fighter:true INX:0 PCT: "
+				};
 		String[][] data = {data_sub1, data_sub2};
+		
+		//String data0 = "POS:0:0:0 ROT:0:0:0 SCL:5" + " MDL:totalcrap"+":totalcrap:true INX:0 PCT: ";//SUB: "
+				//+ "POS:0:30:0 ROT:180:0:0 SCL:1 MDL:"+parts[0]+":"+parts[0]+":false INX:0 END:";
 		
 		for(int i = 0; i < 2; i++){
 			for(int j = 0; j < 6; j++){
@@ -173,7 +191,7 @@ public class NDemo {
 			}
 			else {
 				float dt = DisplayManager.getDelta();
-				mandatoryUpdates(picker, entities, cam, dt);
+				mandatoryUpdates(picker, entities, cam, minimapCam, dt);
 				testColorFunction(picker, textYes, textNo);
 				interactWithGuis(guis, loader, picker, entities, cam, mRenderer);
 				render(cam, mRenderer, entities, terrains, guis, light, fbos, minimapCam);
@@ -189,12 +207,12 @@ public class NDemo {
 	private static void newEntity(Entity camera, Loader loader, MousePicker picker,
 			List<Entity> entities, String actionData, MasterRenderer mRenderer){
 		
-		String[] parts = actionData.split(" ");
+		//String[] parts = actionData.split(" ");
 		
 		Entity ent2 = new Entity();
-		String compString = "POS:0:0:0 ROT:0:0:0 SCL:" + parts[1] + " MDL:"+parts[0]+":"+parts[0]+":true INX:0 PCT: SUB: "
-				+ "POS:0:30:0 ROT:180:0:0 SCL:" + 1 + " MDL:"+parts[0]+":"+parts[0]+":false INX:0 END:";
-		ent2.newEntity(compString.split(" "), loader, mRenderer, picker, entities);
+		//String compString = "POS:0:0:0 ROT:0:0:0 SCL:" + parts[1] + " MDL:"+parts[0]+":"+parts[0]+":true INX:0 PCT: SUB: "
+			//	+ "POS:0:30:0 ROT:180:0:0 SCL:" + 1 + " MDL:"+parts[0]+":"+parts[0]+":false INX:0 END:";
+		ent2.newEntity(actionData.split(" "), loader, mRenderer, picker, entities);
 		
 		entities.add(ent2);
 	}
@@ -214,13 +232,14 @@ public class NDemo {
 	 * Updates the camera, picker, and entities.
 	 */
 	private static void mandatoryUpdates(MousePicker picker, List<Entity> entities,
-			Entity cam, float dt){
+			Entity cam, Entity minimapCam, float dt){
 		Input.update();
 		picker.update();
 		for(Entity ent : entities){
 			ent.update(dt/1000.0f);
 		}
 		cam.update(dt/1000.0f);
+		minimapCam.update(dt/1000.0f);
 	}
 	
 	/**
@@ -267,24 +286,21 @@ public class NDemo {
 		for(Entity terrain : terrains){
 			mRenderer.processTerrain(terrain);
 		}
-		
-		mRenderer.setRenderText(false);
-		fbos.bindReflectionFrameBuffer();
-		mRenderer.Render(light, minimapCam);
-		fbos.unbindCurrentFrameBuffer();
-		mRenderer.setRenderText(true);
-		
 		for(Entity ent : ents){
 			mRenderer.processEntity(ent);
 		}
-		for(Entity terrain : terrains){
-			mRenderer.processTerrain(terrain);
-		}
+		
+		mRenderer.setRenderText(false);
+		fbos.bindReflectionFrameBuffer();
+		mRenderer.Render(light, minimapCam, false);
+		fbos.unbindCurrentFrameBuffer();
+		mRenderer.setRenderText(true);
+		
 		for(GuiTexture gui : guis){
 			mRenderer.processGui(gui);
 		}
 		
-		mRenderer.Render(light, camera);
+		mRenderer.Render(light, camera, true);
 		DisplayManager.updateDisplay();
 	}
 }

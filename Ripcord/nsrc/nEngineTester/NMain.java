@@ -1,6 +1,5 @@
 package nEngineTester;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,6 @@ import org.lwjgl.util.vector.Vector3f;
 import fbos.MinimapFrameBuffer;
 import fontMeshCreator.TextMaster;
 import guis.GuiTexture;
-import html.LoadPage;
 import html.Page;
 import nComponents.Color;
 import nComponents.Entity;
@@ -145,7 +143,7 @@ public class NMain {
 		
 		mRenderer.setRenderText(false);
 		fbos.bindReflectionFrameBuffer();
-		mRenderer.Render(light, minimapCam);
+		mRenderer.Render(light, minimapCam, true);
 		fbos.unbindCurrentFrameBuffer();
 		mRenderer.setRenderText(true);
 		
@@ -159,7 +157,7 @@ public class NMain {
 			mRenderer.processGui(gui);
 		}
 		
-		mRenderer.Render(light, camera);
+		mRenderer.Render(light, camera, true);
 		DisplayManager.updateDisplay();
 	}
 }

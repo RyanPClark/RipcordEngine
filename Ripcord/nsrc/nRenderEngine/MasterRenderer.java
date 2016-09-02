@@ -105,7 +105,7 @@ public class MasterRenderer {
 		guis.clear();
 	}
 	
-	public void Render(Entity light, Entity camera){
+	public void Render(Entity light, Entity camera, boolean clearLists){
 		
 		prepare();
 		
@@ -129,9 +129,11 @@ public class MasterRenderer {
 		if(renderText)
 			TextMaster.render();
 		
-		terrains.clear();
-		entities.clear();
-		guis.clear();
+		if(clearLists){
+			terrains.clear();
+			entities.clear();
+			guis.clear();
+		}
 	}
 	
 	public void processGui(GuiTexture gui){
