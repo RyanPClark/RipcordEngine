@@ -24,6 +24,9 @@ import models.TexturedModel;
 import nComponents.CompType;
 import nComponents.Entity;
 import nComponents.ModelComp;
+import nComponents.Rotation;
+import nParticles.MultiParticle;
+import nShaders.ParticleShader;
 import nShaders.StaticShader;
 import nShaders.TerrainShader;
 import particles.ParticleMaster;
@@ -43,15 +46,19 @@ public class MasterRenderer {
 	private TerrainShader terrainShader = new TerrainShader(MyPaths.makeShaderPath("nTerrainVertex"),
 			MyPaths.makeShaderPath("nTerrainFragment"));
 	
+	private ParticleShader particleShader = new ParticleShader();
+	
 	private Renderer renderer;
 	private TerrainRenderer terrainRenderer;
 	private GUIRenderer guiRenderer;
+	private ParticleRenderer particleRenderer;
 	
 	private ShadowMapMasterRenderer shadowMapRenderer;
 	
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
 	private List<Entity> terrains = new ArrayList<Entity>();
 	private List<GuiTexture> guis = new ArrayList<GuiTexture>();
+	private List<MultiParticle> particles = new ArrayList<MultiParticle>();
 	
 	private Matrix4f projectionMatrix;
 	
@@ -66,6 +73,7 @@ public class MasterRenderer {
 		ParticleMaster.init(loader, projectionMatrix);
 		shadowMapRenderer = new ShadowMapMasterRenderer(camera);
 		GuiInteraction.init(loader);
+		particleRenderer = new ParticleRenderer(loader, particleShader, projectionMatrix);
 	}
 	
 	public static void enableCulling(){
@@ -86,7 +94,7 @@ public class MasterRenderer {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		GL11.glClearColor(0, 0, 0, 1);
+		GL11.glClearColor(0.23f, 0.46f, 0, 0.047f);
 		
 		GL13.glActiveTexture(GL13.GL_TEXTURE5);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, getShadowMapTexture());
@@ -115,6 +123,15 @@ public class MasterRenderer {
 		renderer.render(entities);
 		shader.stop();
 		
+		particleShader.start();
+		particleShader.loadViewMatrix(camera);
+		{
+			Rotation rot = (Rotation)camera.getComponentByType(CompType.ROTATION);
+			particleRenderer.Render(particles, true, -rot.getRotation().y);
+		}
+		
+		particleShader.stop();
+		
 		terrainShader.start();
 		terrainShader.loadViewMatrix(camera);
 		terrainShader.loadLight(light);
@@ -133,7 +150,12 @@ public class MasterRenderer {
 			terrains.clear();
 			entities.clear();
 			guis.clear();
+			particles.clear();
 		}
+	}
+	
+	public void processParticle(MultiParticle particle){
+		particles.add(particle);
 	}
 	
 	public void processGui(GuiTexture gui){
@@ -157,15 +179,6 @@ public class MasterRenderer {
 		
 		ModelComp mComp = (ModelComp)ent.getComponentByType(CompType.MODEL);
 		model = mComp.getModel();
-		
-		/*
-		Hitbox hitbox = (Hitbox)ent.getComponentByType(CompType.HIT_BOX);
-		if(hitbox != null){
-			if(hitbox.isRender()){
-				model = hitbox.getBox().getModel();
-			}
-		}
-		*/
 		
 		List<Entity> batch = entities.get(model);
 		if(batch != null){

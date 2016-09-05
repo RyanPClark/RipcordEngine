@@ -3,12 +3,14 @@ package nEngineTester;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import audio.AudioMaster;
 import fbos.MinimapFrameBuffer;
 import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
@@ -18,8 +20,12 @@ import guis.GuiTexture;
 import html.LoadPage;
 import html.Page;
 import nComponents.Color;
+import nComponents.CompType;
 import nComponents.Entity;
+import nComponents.Hitbox;
 import nComponents.KeyControl;
+import nComponents.LoadEntity;
+import nComponents.MinimapControl;
 import nComponents.Position;
 import nComponents.Rotation;
 import nComponents.Scale;
@@ -38,13 +44,9 @@ public class NDemo {
 	/**
 	 * 
 	 * TODO: 
-	 * Animation component
-	 * Particle emitter component
-	 * Sound component
-	 * Make more models for demo
+	 * Close source at termination + high volume or change attenuation model
 	 * Add AI component(s)
 	 * Add frustum culling
-	 * Add border to demo
 	 * Add game-flow component?
 	 */
 	
@@ -52,16 +54,19 @@ public class NDemo {
 	public static void mainDemo(String[] args){
 			
 		DisplayManager.createDisplay();
+		AudioMaster.init();
 		Loader loader = new Loader();
 		
 		Entity cam = new Entity();
-		cam.addComponent(new Position(cam, new Vector3f(350,75.0f,350)));
+		cam.addComponent(new Position(cam, new Vector3f(375,125.0f,375)));
 		cam.addComponent(new Rotation(cam, new Vector3f(45,-45,0)));
-		cam.addComponent(new KeyControl(cam, 125.0f));
+		cam.addComponent(new KeyControl(cam, 125.0f, new int[]{-240,375,-240,375,50,175}));
 		
 		Entity minimapCam = new Entity();
-		minimapCam.addComponent(new Position(minimapCam, new Vector3f(0,650,0)));
+		minimapCam.addComponent(new Position(minimapCam, new Vector3f(0,400,0)));
 		minimapCam.addComponent(new Rotation(minimapCam, new Vector3f(90,180,0)));
+		Position camPos = (Position)cam.getComponentByType(CompType.POSITION);
+		minimapCam.addComponent(new MinimapControl(minimapCam, new int[]{-300,300,-300,300,50,175}, camPos));
 		
 		MasterRenderer mRenderer = new MasterRenderer(loader, cam);
 		
@@ -96,6 +101,11 @@ public class NDemo {
 		/* Finished with test fonts */
 		
 		MousePicker picker = new MousePicker(cam, mRenderer.getProjectionMatrix());
+		Entity HQ = new Entity();
+		LoadEntity.newEntity("POS:300:0:300 ROT:0:0:0 SCL:0.3 MDL:tower:tower:true".split(" "), 0, loader, mRenderer, picker, entities, HQ, cam);
+		Hitbox HQbox = (Hitbox)HQ.getComponentByType(CompType.HIT_BOX);
+		HQbox.setSelected(false);
+		entities.add(HQ);
 		
 		/* load light */
 		
@@ -137,22 +147,27 @@ public class NDemo {
 		String[][] icons = {icons_sub1, icons_sub2};
 		
 		String[] data_sub1 = {
-				"POS:0:0:0 ROT:0:0:0 SCL:5" + " MDL:totalcrap:totalcrap:true INX:0 PCT: ",
-				"POS:0:0:0 ROT:0:0:0 SCL:0.1" + " MDL:bower:bower:true INX:0 PCT: ",
-				"POS:0:0:0 ROT:0:0:0 SCL:0.45" + " MDL:rocker:rocker:true INX:0 PCT: ",
-				"POS:0:0:0 ROT:0:0:0 SCL:3" + " MDL:build10:build10:true INX:0 PCT: ",
-				"POS:0:0:0 ROT:0:0:0 SCL:6" + " MDL:air-turret-base:mcor_d_sentry_gun_d:true INX:0 PCT: SUB: " + 
-						"POS:0:0:5 ROT:-30:0:0 SCL:1" + " MDL:air-turret-top:mcor_d_sentry_gun_d:false INX:0 IDL:200 END:",
-				"POS:0:0:0 ROT:0:0:0 SCL:3" + " MDL:turret-base:sci_fi_turret_4_diffuse:true INX:0 PCT: SUB: " + 
-				"POS:0:0:0 ROT:0:30:0 SCL:1" + " MDL:turret-top:sci_fi_turret_4_diffuse:false INX:0 IDL:200 END:"
+				"POS:0:0:0 ROT:0:0:0 SCL:7" + " MDL:totalcrap:totalcrap:true PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:0.13" + " MDL:bower:bower:true PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:0.45" + " MDL:rocker:rocker:true PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:5" + " MDL:build10:build10:true PCT: ",
+				"POS:0:0:0 ROT:0:0:0 SCL:6" + " MDL:air-turret-base:mcor_d_sentry_gun_d:true PCT: SUB: " + 
+						"POS:0:0:5 ROT:-30:0:0 SCL:1" + " MDL:air-turret-top:mcor_d_sentry_gun_d:false IDL:200:0.1:30:true END:",
+				"POS:0:0:0 ROT:0:0:0 SCL:3" + " MDL:turret-base:sci_fi_turret_4_diffuse:true PCT: SUB: " + 
+				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:turret-top:sci_fi_turret_4_diffuse:false IDL:200:0.1:30:true END:"
 				};
 		String[] data_sub2 = {
-				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:totalcrap:totalcrap:true INX:0 PCT: ",
-				"POS:0:0:0 ROT:0:0:0 SCL:4.5" + " MDL:humvee:humvee:true INX:0 PCT: ",
-				"POS:0:0:0 ROT:0:0:0 SCL:4" + " MDL:lowpoly-tank:lowpoly-tank:true INX:0 PCT: ",
-				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:totalcrap:totalcrap:true INX:0 PCT: ",
-				"POS:0:0:0 ROT:0:0:0 SCL:1" + " MDL:totalcrap:totalcrap:true INX:0 PCT: ",
-				"POS:0:40:0 ROT:0:0:0 SCL:7.3" + " MDL:fighter:fighter:true INX:0 PCT: "
+				"POS:0:0:0 ROT:0:45:0 SCL:3.5" + " MDL:soldier_body:soldier_tex:true PCT: ANM:walking-small EMT:0:8:2:BLOOD WPN: SND:audio/gun.wav:1:false:false SUB: " + 
+						"POS:0:0:0 ROT:0:0:0 SCL:1 MDL:soldier_right:soldier_tex:false END: SUB: " + 
+						"POS:0:0:0 ROT:0:0:0 SCL:1 MDL:soldier_left:soldier_tex:false END:",
+				"POS:0:0:0 ROT:0:0:0 SCL:4.5" + " MDL:humvee:humvee:true PCT: SND:audio/EngineIdle.wav:1:true:true ",
+				"POS:0:0:0 ROT:0:180:0 SCL:4" + " MDL:lowpoly-tank:lowpoly-tank:true PCT: ",
+				"POS:0:30:0 ROT:0:0:0 SCL:3.5" + " MDL:mi24_base:diffuse_m24_alpha:true PCT: ANM:spinning SND:audio/Helicopter_Hovering_short.wav:1:true:true SUB: " + 
+						"POS:0:0:-2 ROT:0:0:0 SCL:1" + " MDL:mi24_top:diffuse_m24_alpha:false END:",
+						"POS:0:0:0 ROT:0:0:0 SCL:7" + " MDL:mech_top:MechBody:true PCT: ANM:walking SND:audio/mech_walking.wav:1:true:true SUB: " + 
+								"POS:0:0:0 ROT:0:0:0 SCL:1 MDL:mech_right:MechCage:false END: SUB: " + 
+								"POS:0:0:0 ROT:0:0:0 SCL:1 MDL:mech_left:MechCage:false END:",
+				"POS:0:40:0 ROT:0:0:0 SCL:11 MDL:fighter:fighter:true PCT: "
 				};
 		String[][] data = {data_sub1, data_sub2};
 		
@@ -196,6 +211,7 @@ public class NDemo {
 			}
 		}
 		
+		AudioMaster.cleanUp();
 		TextMaster.cleanUp();
 		mRenderer.cleanUp();
 		loader.cleanUP();
@@ -205,13 +221,8 @@ public class NDemo {
 	private static void newEntity(Entity camera, Loader loader, MousePicker picker,
 			List<Entity> entities, String actionData, MasterRenderer mRenderer){
 		
-		//String[] parts = actionData.split(" ");
-		
 		Entity ent2 = new Entity();
-		//String compString = "POS:0:0:0 ROT:0:0:0 SCL:" + parts[1] + " MDL:"+parts[0]+":"+parts[0]+":true INX:0 PCT: SUB: "
-			//	+ "POS:0:30:0 ROT:180:0:0 SCL:" + 1 + " MDL:"+parts[0]+":"+parts[0]+":false INX:0 END:";
-		ent2.newEntity(actionData.split(" "), loader, mRenderer, picker, entities);
-		
+		LoadEntity.newEntity(actionData.split(" "), 0, loader, mRenderer, picker, entities, ent2, camera);
 		entities.add(ent2);
 	}
 	
@@ -233,9 +244,14 @@ public class NDemo {
 			Entity cam, Entity minimapCam, float dt){
 		Input.update();
 		picker.update();
-		for(Entity ent : entities){
-			ent.update(dt/1000.0f);
+		try{
+			for(int i = 0; i < entities.size(); i++){
+				entities.get(i).update(dt/1000.0f);
+			}
 		}
+		catch(ConcurrentModificationException e){
+		}
+		
 		cam.update(dt/1000.0f);
 		minimapCam.update(dt/1000.0f);
 	}

@@ -23,20 +23,19 @@ public class Scale extends Component {
 	
 	public float getMultiplicativeScale(){
 		
-		Entity ent = (Entity)parent;
-		Entity origEnt = ent;
+		Entity origEnt = parent;
 		
 		float scale = 1;
 		
 		while(true){
 			
 			// get position
-			Scale sComp = (Scale)ent.getComponentByType(CompType.SCALE);
+			Scale sComp = (Scale)parent.getComponentByType(CompType.SCALE);
 			float nscale = (sComp != null ? sComp.getScale() : 1);
 			scale *= nscale;
 			
-			if(ent.getParent() != null){
-				ent = (Entity)ent.getParent();
+			if(parent.getParent() != null){
+				parent = parent.getParent();
 			}
 			else {
 				break;

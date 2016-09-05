@@ -23,20 +23,19 @@ public class Position extends Component {
 	
 	public Vector3f getAdditivePosition(){
 		
-		Entity ent = (Entity)parent;
-		Entity origEnt = ent;
+		Entity origEnt = parent;
 		
 		Vector3f position = new Vector3f(0,0,0);
 		
 		while(true){
 			
 			// get position
-			Position pComp = (Position)ent.getComponentByType(CompType.POSITION);
+			Position pComp = (Position)parent.getComponentByType(CompType.POSITION);
 			Vector3f nposition = (pComp != null ? pComp.getPosition() : new Vector3f(0,0,0));
 			Vector3f.add(position, nposition, position);
 			
-			if(ent.getParent() != null){
-				ent = (Entity)ent.getParent();
+			if(parent.getParent() != null){
+				parent = parent.getParent();
 			}
 			else {
 				break;

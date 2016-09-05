@@ -23,20 +23,19 @@ public class Rotation extends Component {
 	
 	public Vector3f getAdditiveRotation(){
 		
-		Entity ent = (Entity)parent;
-		Entity origEnt = ent;
+		Entity origEnt = parent;
 		
 		Vector3f rotation = new Vector3f(0,0,0);
 		
 		while(true){
 			
 			// get position
-			Rotation pComp = (Rotation)ent.getComponentByType(CompType.ROTATION);
-			Vector3f nposition = (pComp != null ? pComp.getRotation() : new Vector3f(0,0,0));
-			Vector3f.add(rotation, nposition, rotation);
+			Rotation pComp = (Rotation)parent.getComponentByType(CompType.ROTATION);
+			Vector3f nrotation = (pComp != null ? pComp.getRotation() : new Vector3f(0,0,0));
+			Vector3f.add(rotation, nrotation, rotation);
 			
-			if(ent.getParent() != null){
-				ent = (Entity)ent.getParent();
+			if(parent.getParent() != null){
+				parent = parent.getParent();
 			}
 			else {
 				break;
@@ -44,7 +43,7 @@ public class Rotation extends Component {
 		}
 		
 		parent = origEnt;
-		
+
 		return rotation;
 	}
 	

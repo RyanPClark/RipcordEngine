@@ -31,7 +31,7 @@ public class NMain {
 		Entity cam = new Entity();
 		cam.addComponent(new Position(cam, new Vector3f(350,75.0f,350)));
 		cam.addComponent(new Rotation(cam, new Vector3f(45,-45,0)));
-		cam.addComponent(new KeyControl(cam, 125.0f));
+		cam.addComponent(new KeyControl(cam, 125.0f, new int[]{-360,360,-360,360,50,175}));
 		
 		Entity minimapCam = new Entity();
 		minimapCam.addComponent(new Position(minimapCam, new Vector3f(0,650,0)));

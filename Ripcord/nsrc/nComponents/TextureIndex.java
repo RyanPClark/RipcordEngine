@@ -25,8 +25,7 @@ public class TextureIndex extends Component {
 	 * @return - the x value of a texture in a texture atlas
 	 */
 	public float getTextureXOffset(){
-		Entity eParent = (Entity)parent;
-		ModelComp mComp = (ModelComp)eParent.getComponentByType(CompType.MODEL);
+		ModelComp mComp = (ModelComp)parent.getComponentByType(CompType.MODEL);
 		int column = index % mComp.getModel().getTexture().getNumberOfRows();
 		return (float)column/(float)mComp.getModel().getTexture().getNumberOfRows();
 	}
@@ -35,8 +34,7 @@ public class TextureIndex extends Component {
 	 * @return - the y value of a texture in a texture atlas
 	 */
 	public float getTextureYOffset(){
-		Entity eParent = (Entity)parent;
-		ModelComp mComp = (ModelComp)eParent.getComponentByType(CompType.MODEL);
+		ModelComp mComp = (ModelComp)parent.getComponentByType(CompType.MODEL);
 		int row = index / mComp.getModel().getTexture().getNumberOfRows();
 		return (float)row/(float)mComp.getModel().getTexture().getNumberOfRows();
 	}

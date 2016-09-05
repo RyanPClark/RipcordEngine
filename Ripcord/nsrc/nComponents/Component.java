@@ -13,13 +13,13 @@ public abstract class Component {
 
 	public abstract void update(float dt);
 	
-	protected Component parent = null;
+	protected Entity parent = null;
 	private CompType type;
 	
-	public Component getParent() {
+	public Entity getParent() {
 		return parent;
 	}
-	public void setParent(Component parent) {
+	public void setParent(Entity parent) {
 		this.parent = parent;
 	}
 	public CompType getType() {

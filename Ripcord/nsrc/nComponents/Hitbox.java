@@ -3,10 +3,10 @@ package nComponents;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 import mapBuilding.Box;
+import nEngineTester.Input;
 import nToolbox.MousePicker;
 import toolbox.GameMath;
 
@@ -24,32 +24,32 @@ public class Hitbox extends Component{
 	private boolean selected = true;
 	
 	public void addParentAndDestory(){
-		Entity eParent = (Entity)parent;
 		while(true){
-			if(eParent.getParent() == null){
+			if(parent.getParent() == null){
 				return;
 			}
 			else {
-				Entity grandParent = (Entity)eParent.getParent();
+				Entity grandParent = parent.getParent();
 				Hitbox parentBox = (Hitbox)grandParent.getComponentByType(CompType.HIT_BOX);
 				if(parentBox == null)return;
 				parentBox.boxes.addAll(boxes);
 				System.out.println("WHAT");
 			}
-			eParent = (Entity)eParent.getParent();
+			parent = parent.getParent();
 		}
 	}
 	
 	public void update(float dt) {
 		
 		for(Box box : boxes){
-			if(Mouse.isButtonDown(0)){
-				//box.setSelected(!inBox);
-				//box.setSelected(true);
-				//boolean inBox = GameMath.inBox(getBox(), picker.getCameraRay(), 0, -1000);
-				
+			if(Input.wasClicked()){
 				boolean intersected = GameMath.intersection(box, picker.getCameraRay(), (Entity)parent);
-				setSelected(intersected);
+				if(intersected){
+					setSelected(!isSelected());
+				}
+				else {
+					setSelected(false);
+				}
 			}
 			MousePicker.setUnit_selected(isSelected());
 		}

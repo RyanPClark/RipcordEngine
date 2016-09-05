@@ -25,7 +25,7 @@ public class MousePicker {
 	private static final int RECURSION_COUNT = 200;
 	private static final float RAY_RANGE = 600;
 	
-	private static boolean unit_selected;
+	private static boolean unit_selected = false;
 	
 	private Ray cameraRay;
 	

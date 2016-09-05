@@ -117,8 +117,8 @@ public final class GameMath {
 		Matrix4f matrix = new Matrix4f();
 		matrix.setIdentity();
 		Matrix4f.translate(translation, matrix, matrix);
-		Matrix4f.rotate(toRadians(rx), rotation1, matrix, matrix);
 		Matrix4f.rotate(toRadians(ry), rotation2, matrix, matrix);
+		Matrix4f.rotate(toRadians(rx), rotation1, matrix, matrix);
 		Matrix4f.rotate(toRadians(rz), rotation3, matrix, matrix);
 		Matrix4f.scale(scale, matrix, matrix);
 		return matrix;

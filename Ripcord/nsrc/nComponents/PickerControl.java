@@ -15,10 +15,9 @@ public class PickerControl extends Component {
 	
 	public void update(float dt) {
 		
-		Entity eParent = (Entity)parent;
-		Position pos = (Position)eParent.getComponentByType(CompType.POSITION);
-		Hitbox mine  = (Hitbox)eParent.getComponentByType(CompType.HIT_BOX);
-		Scale myScale = (Scale)eParent.getComponentByType(CompType.SCALE);
+		Position pos = (Position)parent.getComponentByType(CompType.POSITION);
+		Hitbox mine  = (Hitbox)parent.getComponentByType(CompType.HIT_BOX);
+		Scale myScale = (Scale)parent.getComponentByType(CompType.SCALE);
 		
 		
 		if(mine != null){
@@ -39,7 +38,7 @@ public class PickerControl extends Component {
 				Position ePos = (Position)e.getComponentByType(CompType.POSITION);
 				Hitbox theirs = (Hitbox)e.getComponentByType(CompType.HIT_BOX);
 				Scale theirScale = (Scale)e.getComponentByType(CompType.SCALE);
-				if(e == eParent.parent){continue;}
+				if(e == parent.parent){continue;}
 				if(mine == theirs || theirs == null){continue;}
 				if(mine.isIntersect(theirs, ePos.getAdditivePosition(), picker.getCurrentTerrainPoint(), myScale.getMultiplicativeScale(),
 						theirScale.getMultiplicativeScale())){

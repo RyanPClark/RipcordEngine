@@ -15,8 +15,7 @@ public class ModelComp extends Component {
 	private MasterRenderer mRenderer;
 	
 	public void update(float dt) {
-		Entity eParent = (Entity)parent;
-		mRenderer.processEntity(eParent);
+		mRenderer.processEntity(parent);
 	}
 
 	public ModelComp(Entity parent, TexturedModel model, MasterRenderer mRenderer){

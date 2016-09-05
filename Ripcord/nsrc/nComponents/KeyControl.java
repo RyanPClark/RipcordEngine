@@ -9,9 +9,12 @@ package nComponents;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
+import audio.AudioMaster;
+
 public class KeyControl extends Component {
 
 	private float speed = 125.0f;
+	private int[] bounds;
 	
 	/**
 	 * @param dt - delta time
@@ -20,9 +23,8 @@ public class KeyControl extends Component {
 	 */
 	public void update(float dt) {
 		
-		Entity ent = (Entity)getParent();
-		Position pos = (Position)ent.getComponentByType(CompType.POSITION);
-		Rotation rot = (Rotation)ent.getComponentByType(CompType.ROTATION);
+		Position pos = (Position)parent.getComponentByType(CompType.POSITION);
+		Rotation rot = (Rotation)parent.getComponentByType(CompType.ROTATION);
 		
 		
 		Vector3f camDirection = rot.getRotation();
@@ -55,25 +57,30 @@ public class KeyControl extends Component {
 		float ny = pos.getPosition().getY()+direction.y * dt * speed;
 		float nz = pos.getPosition().getZ()+direction.z * dt * speed;
 		
-		if(nx < -360 || nx > 360)
+		// -360, 360, -360, 360, 50, 175
+		
+		if(nx < bounds[0] || nx > bounds[1])
 			nx = pos.getPosition().getX();
 		
-		if(nz < -360 || nz > 360)
+		if(nz < bounds[2] || nz > bounds[3])
 			nz = pos.getPosition().getZ();
 		
-		if(ny < 50 || ny > 175)
+		if(ny < bounds[4] || ny > bounds[5])
 			ny = pos.getPosition().getY();
 		
 		
 		pos.getPosition().setX(nx);
 		pos.getPosition().setY(ny);
 		pos.getPosition().setZ(nz);
+		
+		AudioMaster.setListenerData(nx, ny, nz);
 	}
 
-	public KeyControl(Entity parent, float speed){
+	public KeyControl(Entity parent, float speed, int[] bounds){
 		
 		this.setType(CompType.KEY_CONTROL);
 		this.setParent(parent);
 		this.speed = speed;
+		this.bounds = bounds;
 	}
 }

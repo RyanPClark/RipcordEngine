@@ -13,11 +13,12 @@ public class Idle extends Component {
 	private static final boolean RIGHT = true;
 	
 	private int frequency;
-	private float turnSpeed = 0.1f;
+	private float turnSpeed = 10.1f;
 	private int turnSize = 30;
 	private boolean direction = RIGHT;
 	private boolean turning = false;
 	private float amountTurned = 0;
+	private boolean changeDirection = false;
 	
 	public void update(float dt) {
 		
@@ -26,12 +27,12 @@ public class Idle extends Component {
 			turning = (amountTurned == frequency);
 			amountTurned++;
 			if(turning){
-				direction = !direction;
+				if(changeDirection)
+					direction = !direction;
 				amountTurned = 0;
 			}
 		}
 		else {
-			Entity parent = (Entity)this.parent;
 			Rotation rComp = (Rotation)parent.getComponentByType(CompType.ROTATION);
 			amountTurned += turnSpeed;
 			if (direction == RIGHT) rComp.getRotation().y += turnSpeed;
@@ -45,11 +46,14 @@ public class Idle extends Component {
 		
 	}
 
-	public Idle(Entity parent, int frequency){
+	public Idle(Entity parent, int frequency, float speed, int size, boolean changeDirection){
 		
 		this.setType(CompType.IDLE);
 		this.setParent(parent);
 		this.setFrequency(frequency);
+		this.turnSize = size;
+		this.turnSpeed = speed;
+		this.changeDirection = changeDirection;
 	}
 	
 	public int getFrequency() {

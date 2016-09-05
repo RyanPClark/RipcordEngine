@@ -1,4 +1,4 @@
-package animation;
+package nAnimation;
 
 import java.util.List;
 
@@ -8,23 +8,25 @@ import org.lwjgl.util.vector.Vector4f;
 public class Animation {
 
 	public List<Vector4f[]> rotationData;
-	public List<Vector3f> translationData;
+	public List<Vector3f[]> translationData;
 	private int length = 1000;
 	private int amountThrough = 0;
 	private boolean loop;
+	private boolean throughAndBack = true;
+	private int direction = 1;
 	
-	public Animation(List<Vector4f[]> rotationData, List<Vector3f> translationData, int length){
+	public Animation(List<Vector4f[]> rotationData, List<Vector3f[]> translationData, int length){
 		
 		this.translationData = translationData;
 		this.rotationData = rotationData;
 		this.length = length;
 	}
 
-	public List<Vector3f> getTranslationData() {
+	public List<Vector3f[]> getTranslationData() {
 		return translationData;
 	}
 
-	public void setTranslationData(List<Vector3f> translationData) {
+	public void setTranslationData(List<Vector3f[]> translationData) {
 		this.translationData = translationData;
 	}
 
@@ -58,6 +60,22 @@ public class Animation {
 
 	public void setLoop(boolean loop) {
 		this.loop = loop;
+	}
+
+	public boolean isThroughAndBack() {
+		return throughAndBack;
+	}
+
+	public void setThroughAndBack(boolean throughAndBack) {
+		this.throughAndBack = throughAndBack;
+	}
+
+	public int getDirection() {
+		return direction;
+	}
+
+	public void setDirection(int direction) {
+		this.direction = direction;
 	}
 	
 	
