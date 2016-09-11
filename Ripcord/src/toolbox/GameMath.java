@@ -30,12 +30,8 @@ public final class GameMath {
 	
 	private static final float PI = 3.14159265f;
 	
-	public static boolean intersection(Box b, Ray r, Entity entity){
-		
-		Vector3f min3 = new Vector3f(b.getBounds()[0]);
-		Vector3f max3 = new Vector3f(b.getBounds()[1]);
-		
-		/* Load transformation variables */
+	
+	public static Vector4f transformVector(Vector4f point, Entity entity){
 		
 		Scale cScale = (Scale)entity.getComponentByType(CompType.SCALE);
 		float scale = cScale.getScale();
@@ -47,13 +43,49 @@ public final class GameMath {
 		Vector3f position = cPos.getPosition();
 		
 		Matrix4f translationMatrix = GameMath.createTransformationMatrix(position, rotation.x, rotation.y, rotation.z, new Vector3f(scale,scale,scale));
+		Matrix4f.transform(translationMatrix, point, point);
+		
+		return point;
+	}
+	
+	public static void transformBox(Box b, Entity entity, Box store){
+		Vector3f min3 = new Vector3f(b.getBounds()[0]);
+		Vector3f max3 = new Vector3f(b.getBounds()[1]);
+		
 		Vector4f min = new Vector4f(min3.x,min3.y,min3.z,1);
 		Vector4f max = new Vector4f(max3.x,max3.y,max3.z,1);
+		
+		Scale cScale = (Scale)entity.getComponentByType(CompType.SCALE);
+		float scale = cScale.getScale();
+		
+		//Rotation cRot = (Rotation)entity.getComponentByType(CompType.ROTATION);
+		//Vector3f rotation = cRot.getRotation();
+		
+		Position cPos = (Position)entity.getComponentByType(CompType.POSITION);
+		Vector3f position = cPos.getPosition();
+		
+		Matrix4f translationMatrix = GameMath.createTransformationMatrix(position, 0, 0, 0, new Vector3f(scale,scale,scale));
 		
 		Matrix4f.transform(translationMatrix, min, min);
 		Matrix4f.transform(translationMatrix, max, max);
 		
+		store.getBounds()[0].x = min.x;
+		store.getBounds()[0].y = min.y;
+		store.getBounds()[0].z = min.z;
+		store.getBounds()[1].x = max.x;
+		store.getBounds()[1].y = max.y;
+		store.getBounds()[1].z = max.z;
+	}
+	
+	public static boolean intersection(Box b, Ray r, Entity entity){
+		
 		/* Calculate intersection */
+		
+		Vector3f min3 = new Vector3f(b.getBounds()[0]);
+		Vector3f max3 = new Vector3f(b.getBounds()[1]);
+		
+		Vector3f min = new Vector3f(min3.x,min3.y,min3.z);
+		Vector3f max = new Vector3f(max3.x,max3.y,max3.z);
 		
 		float tx1 = (min.x-r.getOrigin().x)*r.getInv_direction().x;
 		float tx2 = (max.x-r.getOrigin().x)*r.getInv_direction().x;
@@ -76,36 +108,12 @@ public final class GameMath {
 		return tmax >= tmin && tmax >= 0;
 	}
 	
-	public static boolean inBox(Box box, Ray r, float t0, float t1){
-		
-		float tmin, tmax, tymin, tymax, tzmin, tzmax;
-		
-		tmin = (box.getBounds()[r.getSign()[0]].x - r.getOrigin().x) * r.getInv_direction().x;
-		tmax = (box.getBounds()[1-r.getSign()[0]].x - r.getOrigin().x) * r.getInv_direction().x;
-		tymin = (box.getBounds()[r.getSign()[1]].y - r.getOrigin().y) * r.getInv_direction().y;
-		tymax = (box.getBounds()[1-r.getSign()[1]].y - r.getOrigin().y) * r.getInv_direction().y;
-		
-		if ( (tmin > tymax) || (tymin > tmax) )
-			return false;
-		if (tymin > tmin)
-			tmin = tymin;
-		if (tymax < tmax)
-			tmax = tymax;
-
-		tzmin = (box.getBounds()[r.getSign()[2]].z - r.getOrigin().z) * r.getInv_direction().z;
-		tzmax = (box.getBounds()[1-r.getSign()[2]].z - r.getOrigin().z) * r.getInv_direction().z;
-		
-		System.out.println((tmin > tzmax) + ", " + (tzmin > tmax));
-		
-		if ( (tmin > tzmax) || (tzmin > tmax) )
-			return false;
-		if (tzmin > tmin)
-			tmin = tzmin;
-		if (tzmax < tmax)
-			tmax = tzmax;
-		
-		return ( (tmin < t1) && (tmax > t0) );
+	public static float distanceBetween(Vector3f p1, Vector3f p2){
+		return (float)Math.sqrt(
+				(p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z)
+				);
 	}
+	
 	public static float barryCentric(Vector3f p1, Vector3f p2, Vector3f p3, Vector2f pos) {
 		float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
 		float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;

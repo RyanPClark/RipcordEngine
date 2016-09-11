@@ -22,6 +22,7 @@ public class Box {
 	private Vector3f bounds[] = new Vector3f[2];
 	private TexturedModel model;
 	private Position parentPos;
+	private Vector3f middle = new Vector3f();
 	
 	public Box(){}
 	
@@ -84,10 +85,18 @@ public class Box {
 				loader.loadToVAO(vertices, textureCoords, normals, indices),
 				new ModelTexture(-1)
 			);
+		calculateMiddle();
+		
 		//System.out.println("MIN: " + bounds[0].x + ", " + bounds[0].y + ", " + bounds[0].z);
 		//System.out.println("MAX: " + bounds[1].x + ", " + bounds[1].y + ", " + bounds[1].z);
 	}
 
+	public void calculateMiddle(){
+		middle.x = (bounds[0].x + bounds[1].x) / 2.0f;
+		middle.y = (bounds[0].y + bounds[1].y) / 2.0f;
+		middle.z = (bounds[0].z + bounds[1].z) / 2.0f;
+	}
+	
 	/**
 	 * Getters and setters for data
 	 */
@@ -115,4 +124,14 @@ public class Box {
 	public void setParentPos(Position parentPos) {
 		this.parentPos = parentPos;
 	}
+
+	public Vector3f getMiddle() {
+		return middle;
+	}
+
+	public void setMiddle(Vector3f middle) {
+		this.middle = middle;
+	}
+	
+	
 }

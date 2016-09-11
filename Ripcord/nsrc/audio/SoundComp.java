@@ -1,8 +1,11 @@
-package nComponents;
+package audio;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import audio.Source;
+import nComponents.CompType;
+import nComponents.Component;
+import nComponents.Entity;
+import nComponents.Position;
 
 public class SoundComp extends Component {
 
@@ -23,6 +26,10 @@ public class SoundComp extends Component {
 		this.source = source;
 		this.buffer = buffer;
 		source.getBuffers().add(buffer);
+	}
+	
+	public void stopAll(){
+		source.stop();
 	}
 
 	public void playWithBuffer(int index){

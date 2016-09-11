@@ -76,7 +76,7 @@ public final class Statics {
 	public static final float LOD_BIAS = 0.4f;
 	
 	public static final float TERRAIN_SIZE = 500;
-	public static final float TERRAIN_MAX_HEIGHT = 8;
+	public static final float TERRAIN_MAX_HEIGHT = 20;
 	public static final float TERRAIN_MAX_PIXEL_COLOR = 256*256*256;
 	public static final int TERRAIN_RES = 1;
 	

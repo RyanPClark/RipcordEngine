@@ -127,7 +127,7 @@ public class MasterRenderer {
 		particleShader.loadViewMatrix(camera);
 		{
 			Rotation rot = (Rotation)camera.getComponentByType(CompType.ROTATION);
-			particleRenderer.Render(particles, true, -rot.getRotation().y);
+			particleRenderer.Render(particles, false, -rot.getRotation().y);
 		}
 		
 		particleShader.stop();
@@ -190,12 +190,14 @@ public class MasterRenderer {
 		}
 	}
 	
-	public void renderShadowMap(List<Entity> entitiesList, Entity sun){
+	public void renderShadowMap(List<Entity> entitiesList, Entity sun, boolean clear){
 		for(Entity ent : entitiesList){
-			processEntity(ent);
+			if(ent.getComponentByType(CompType.MODEL) != null)
+				processEntity(ent);
 		}
 		shadowMapRenderer.render(entities, sun);
-		entities.clear();
+		if(clear)
+			entities.clear();
 	}
 	
 	public int getShadowMapTexture(){

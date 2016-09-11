@@ -132,11 +132,8 @@ public class NMain {
 	private static void render(Entity camera, MasterRenderer mRenderer, List<Entity> ents, List<Entity> terrains,
 			List<GuiTexture> guis, Entity light, MinimapFrameBuffer fbos, Entity minimapCam){
 
-		mRenderer.renderShadowMap(ents, light);
+		mRenderer.renderShadowMap(ents, light, false);
 		
-		for(Entity ent : ents){
-			mRenderer.processEntity(ent);
-		}
 		for(Entity terrain : terrains){
 			mRenderer.processTerrain(terrain);
 		}

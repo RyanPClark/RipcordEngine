@@ -46,12 +46,12 @@ public class ParticleEmitter extends Component {
 	public ParticleEmitter (Entity parent, Vector3f relPosition, String type, MasterRenderer mRenderer, Rotation camRot) {
 		
 		if(type.equals("BLOOD")){
-			this.velocity = new Vector3f(16,6,16);
+			this.velocity = new Vector3f(8,3,8);
 			this.hz = 12;
 			this.lifeLength = 50;
 			this.gravity = -0.01f;
 			this.color = new Vector3f(1,0,0);
-			this.scale = new Vector3f(0.05f, 0.05f, 0.05f);
+			this.scale = new Vector3f(0.09f, 0.09f, 0.09f);
 		}else if(type.equals("FIRE")){
 			this.velocity = new Vector3f(10,6,10);
 			this.hz = 3;
@@ -81,6 +81,7 @@ public class ParticleEmitter extends Component {
 		
 		if (emitting){
 			addParticles();
+			emitting = !emitting;
 		}
 		
 		for (MultiParticle particle : particles){

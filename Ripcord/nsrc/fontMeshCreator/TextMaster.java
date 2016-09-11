@@ -48,6 +48,10 @@ public class TextMaster {
         }
     }
      
+    public static void clear(){
+    	texts.clear();
+    }
+    
     public static void cleanUp(){
         renderer.cleanUp();
     }

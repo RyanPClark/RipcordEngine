@@ -14,6 +14,7 @@ public class Animation {
 	private boolean loop;
 	private boolean throughAndBack = true;
 	private int direction = 1;
+	private String name;
 	
 	public Animation(List<Vector4f[]> rotationData, List<Vector3f[]> translationData, int length){
 		
@@ -76,6 +77,14 @@ public class Animation {
 
 	public void setDirection(int direction) {
 		this.direction = direction;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	

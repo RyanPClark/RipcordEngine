@@ -1,4 +1,9 @@
-package nComponents;
+package nAnimation;
+
+import nComponents.CompType;
+import nComponents.Component;
+import nComponents.Entity;
+import nComponents.Rotation;
 
 /**
  * 

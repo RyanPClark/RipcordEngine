@@ -1,5 +1,8 @@
 package nToolbox;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Ryan Clark
  * 
@@ -25,7 +28,7 @@ public class MousePicker {
 	private static final int RECURSION_COUNT = 200;
 	private static final float RAY_RANGE = 600;
 	
-	private static boolean unit_selected = false;
+	private static List<Entity> units_selected = new ArrayList<Entity>();
 	
 	private Ray cameraRay;
 	
@@ -54,13 +57,12 @@ public class MousePicker {
 		
 		viewMatrix = GameMath.createViewMatrix(camera);
 		currentRay = calculateMouseRay();
-		
 		setCameraRay(new Ray(getCameraPosition(camera), currentRay));
 		
 		currentTerrainPoint = intersectionInRange(0, RAY_RANGE, currentRay) ?
 				binarySearch(0,0,RAY_RANGE,currentRay) : null;
-		
-		MousePicker.setUnit_selected(false);
+				
+		units_selected.clear();
 	}
 	
 	private Vector3f getCameraPosition(Entity camera){
@@ -114,7 +116,6 @@ public class MousePicker {
 		float half = start + ((finish - start) / 2f);
 		if (count >= RECURSION_COUNT) {
 			Vector3f endPoint = getPointOnRay(ray, half);
-			
 			return endPoint;
 		}
 		if (intersectionInRange(start, half, ray)) {
@@ -151,11 +152,11 @@ public class MousePicker {
 		this.cameraRay = cameraRay;
 	}
 
-	public static boolean isUnit_selected() {
-		return unit_selected;
+	public static List<Entity> getUnits_selected() {
+		return units_selected;
 	}
 
-	public static void setUnit_selected(boolean unit_selected) {
-		MousePicker.unit_selected = unit_selected;
+	public static void setUnits_selected(List<Entity> units_selected) {
+		MousePicker.units_selected = units_selected;
 	}
 }

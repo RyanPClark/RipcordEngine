@@ -63,6 +63,36 @@ public class MultiParticle{
 	public int getSize(){
 		return size;
 	}
-	
 
+	public void setPosition(Vector3f[] position) {
+		this.position = position;
+	}
+
+	public void setScale(Vector3f[] scale) {
+		this.scale = scale;
+	}
+
+	public void setVelocity(Vector3f[] velocity) {
+		this.velocity = velocity;
+	}
+
+	public void setGravity(float gravity) {
+		this.gravity = gravity;
+	}
+
+	public void setColor(Vector3f color) {
+		this.color = color;
+	}
+
+	public void setLifeTime(int lifeTime) {
+		this.lifeTime = lifeTime;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+	
+	
+	
+	
 }

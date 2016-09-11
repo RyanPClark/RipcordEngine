@@ -1,4 +1,4 @@
-package nComponents;
+package nAnimation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,11 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
-import nAnimation.Animation;
+import nComponents.CompType;
+import nComponents.Component;
+import nComponents.Entity;
+import nComponents.Position;
+import nComponents.Rotation;
 
 public class AnimationComp extends Component {
 
@@ -17,6 +21,28 @@ public class AnimationComp extends Component {
 		if(currentAnimation != -1)
 		{
 			playAnimation(currentAnimation);
+		}
+	}
+	
+	public void setAnimationByName(String name){
+		for(int i = 0; i < animations.size(); i++){
+			if(animations.get(i).getName().equals(name)){
+				currentAnimation = i;
+				return;
+			}
+		}
+	}
+	
+	public void stopAll(){
+		currentAnimation = -1;
+	}
+	
+	public void stopAnimationByName(String name){
+		for(int i = 0; i < animations.size(); i++){
+			if(animations.get(i).getName().equals(name)){
+				currentAnimation = -1;
+				return;
+			}
 		}
 	}
 	
@@ -114,5 +140,10 @@ public class AnimationComp extends Component {
 	public void setAnimations(List<Animation> animations) {
 		this.animations = animations;
 	}
+
+	public int getCurrentAnimation() {
+		return currentAnimation;
+	}
+	
 	
 }
